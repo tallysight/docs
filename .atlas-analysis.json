@@ -1,0 +1,72 @@
+{
+  "projectType": "saas",
+  "projectName": "Tallysight",
+  "projectDescription": "Tallysight is a sports betting analytics platform that lets analysts publish picks and insights, and lets publishers embed live odds widgets on their websites.",
+  "theme": "luma",
+  "primaryColor": "#008aff",
+  "lightColor": "#e6f3ff",
+  "darkColor": "#005cbf",
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Documentation",
+        "groups": [
+          {
+            "group": "Get Started",
+            "pages": ["introduction", "quickstart"]
+          },
+          {
+            "group": "Core Concepts",
+            "pages": ["concepts/picks-and-betslips", "concepts/workspaces", "concepts/widgets-overview"]
+          },
+          {
+            "group": "Embedding Widgets",
+            "pages": ["widgets/installation", "widgets/tile", "widgets/feed", "widgets/betslip", "widgets/odds-text", "widgets/promo-tiles", "widgets/bet-builder"]
+          },
+          {
+            "group": "SDK Reference",
+            "pages": ["sdk/api-reference", "sdk/configuration", "sdk/lazy-loading", "sdk/auto-detection"]
+          },
+          {
+            "group": "Customization",
+            "pages": ["customization/theming", "customization/workspace-branding", "customization/self-hosting"]
+          },
+          {
+            "group": "Help",
+            "pages": ["troubleshooting", "faq"]
+          }
+        ]
+      }
+    ]
+  },
+  "keyFeatures": [
+    "Embeddable odds widgets (Tile, Feed, Betslip, Odds Text, Promo Tiles, Bet Builder)",
+    "JavaScript SDK with auto widget detection and lazy loading",
+    "Multi-tenant workspace branding with light/dark theme support",
+    "Sports analytics and pick tracking for analysts",
+    "Community pick feeds with verified/all/community tabs",
+    "Affiliate odds links with sportsbook integration",
+    "WordPress shortcode and Web Component embed formats",
+    "Real-time odds refresh and live game support"
+  ],
+  "publicApiSurface": [
+    "Tallysight.scan([selector])",
+    "Tallysight.loadWidget({ type?, element? })",
+    "Tallysight.configure(options)",
+    "Tallysight.enableAutoDetection() / disableAutoDetection()",
+    "Tallysight.enableLazyLoading() / disableLazyLoading()",
+    "Tallysight.enableBetBuilder() / disableBetBuilder()",
+    "Tallysight.preloadWidget(type)",
+    "Tallysight.trackCustomEvent(name, props?, domain?)",
+    "Tallysight.isReady() / whenReady()",
+    "Tallysight.getSdkState()",
+    "data-tallysight-widget-type attribute",
+    "data-tallysight-widget-id attribute",
+    "data-tallysight-widget-config-* attributes",
+    "data-tallysight-widget-loading (eager/lazy/auto)",
+    "data-tallysight-defaults-widget-config-workspace",
+    "data-tallysight-observer (MutationObserver toggle)",
+    "data-tallysight-bet-builder-enabled",
+    "data-tallysight-base-url (custom CDN)"
+  ]
+}

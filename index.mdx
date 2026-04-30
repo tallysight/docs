@@ -1,0 +1,57 @@
+---
+title: "Tallysight documentation: widgets, SDK, and analytics"
+description: "Tallysight helps sports analysts publish picks and lets publishers embed live odds widgets. Explore the SDK, widget guides, and API reference."
+---
+
+Tallysight is a sports betting analytics platform that empowers analysts to publish picks and insights, and lets publishers embed live odds widgets directly on their websites. Whether you're a sports media company looking to add real-time odds to your articles, or an analyst building a following with data-driven picks, Tallysight gives you the tools to do it.
+
+<CardGroup cols={2}>
+  <Card title="Quick Start" icon="rocket" href="/quickstart">
+    Add your first Tallysight widget to a web page in under five minutes.
+  </Card>
+  <Card title="Embedding Widgets" icon="code" href="/widgets/installation">
+    Explore all available widgets: Tile, Feed, Betslip, Odds Text, and more.
+  </Card>
+  <Card title="SDK Reference" icon="book" href="/sdk/api-reference">
+    Full reference for the JavaScript SDK public API.
+  </Card>
+  <Card title="Customization" icon="paintbrush" href="/customization/theming">
+    Apply your workspace branding, colors, and dark mode to every widget.
+  </Card>
+</CardGroup>
+
+## How Tallysight works
+
+Tallysight widgets are standalone JavaScript bundles hosted on a CDN. You add a single script tag to your page and mark HTML elements with `data-tallysight-widget-type`. The SDK automatically detects those elements and loads the right widget bundle for each one.
+
+<Steps>
+  <Step title="Add the SDK script tag">
+    Include the Tallysight SDK on any page where you want widgets to appear.
+  </Step>
+  <Step title="Create widget elements">
+    Add HTML elements with the appropriate `data-tallysight-widget-type` and `data-tallysight-widget-id` attributes.
+  </Step>
+  <Step title="Configure your workspace">
+    Set your workspace slug so widgets automatically apply your branding and sportsbook affiliations.
+  </Step>
+  <Step title="Go live">
+    Publish your page — widgets load automatically when visitors arrive.
+  </Step>
+</Steps>
+
+## Choose your path
+
+<CardGroup cols={2}>
+  <Card title="Core Concepts" icon="lightbulb" href="/concepts/picks-and-betslips">
+    Learn about picks, betslips, workspaces, and how widgets fit together.
+  </Card>
+  <Card title="Theming & Branding" icon="palette" href="/customization/workspace-branding">
+    Customize widget colors and logos to match your site's design.
+  </Card>
+  <Card title="Lazy Loading" icon="gauge" href="/sdk/lazy-loading">
+    Improve page performance by loading widgets only when they enter the viewport.
+  </Card>
+  <Card title="Troubleshooting" icon="triangle-exclamation" href="/troubleshooting">
+    Common issues and how to resolve them quickly.
+  </Card>
+</CardGroup>

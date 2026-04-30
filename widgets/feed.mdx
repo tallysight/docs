@@ -1,0 +1,94 @@
+---
+title: "Feed widget: embed a scrollable analyst picks feed"
+description: "Embed a scrollable, infinitely paginating feed of analyst picks filtered by sport, league, community, and market type from your Tallysight workspace."
+---
+
+The Feed widget displays a scrollable, infinitely paginating list of betslips published by analysts in your workspace. Visitors can filter by sport and event, and you can configure multiple tabs to let them switch between all picks, verified analyst picks, and community picks. The feed loads three betslips at a time and fetches more as the visitor scrolls.
+
+## Embed code
+
+Add the SDK script tag and a `<div>` element with `data-tallysight-widget-type="feed"`:
+
+```html
+<div
+  data-tallysight-widget-type="feed"
+  data-tallysight-widget-id="nba,2024-25-regular-season,the-athletic"
+  data-tallysight-widget-config-tabs="all,verified,community"
+  data-tallysight-widget-config-default-tab="all"
+></div>
+```
+
+## Widget ID format
+
+The feed widget ID is a composite string that encodes three values separated by commas:
+
+```
+{sport},{event},{network}
+```
+
+For example: `nba,2024-25-regular-season,the-athletic`
+
+Use `"all"` for any dimension to show everything in that dimension. For example:
+
+- `"all,all,the-athletic"` — all sports and events for the `the-athletic` workspace
+- `"nba,all,the-athletic"` — all NBA events for the `the-athletic` workspace
+- `"nfl,2025-26,sports-interaction"` — NFL 2025–26 season for `sports-interaction`
+
+## Feed tabs
+
+When you set `config-tabs`, the widget renders a tab bar above the feed. Clicking a tab re-fetches the feed filtered to that type:
+
+| Tab value | What it shows |
+|---|---|
+| `all` | All betslips from the workspace |
+| `verified` | Betslips from analysts with verified status |
+| `community` | Betslips from community members |
+
+If you only supply a single tab value, the widget does not show a tab bar — it simply requests that feed type from the API. If you omit `config-tabs` entirely, the widget falls back to the default behavior with no tab parameter sent to the API, which is backward compatible with older embeds.
+
+## Configuration options
+
+| Config attribute | Default | Description |
+|---|---|---|
+| `config-tabs` | (none) | Comma-separated list of visible tabs: `all`, `verified`, `community` |
+| `config-default-tab` | First tab in the list | The tab that is active when the widget first loads |
+| `config-market` | (none) | Filter the feed to a specific market type (e.g., `MoneylineMarket`) |
+| `config-sportsbook` | (none) | Filter the feed to picks associated with a specific sportsbook. Contact your Tallysight account manager for the sportsbook identifier |
+| `config-hide-creators` | (none) | Comma-separated list of creator `_id` values or usernames to exclude from the feed |
+| `config-show-filters` | `true` | Show or hide the sport pill and event dropdown filter UI |
+| `config-community-scope` | `workspace` | `workspace` limits community picks to your embed organization; `platform` shows community picks from all of Tallysight |
+
+## Embed examples
+
+**All three tabs, defaulting to "all":**
+
+```html
+<div
+  data-tallysight-widget-type="feed"
+  data-tallysight-widget-id="nba,2024-25,the-athletic"
+  data-tallysight-widget-config-tabs="all,verified,community"
+  data-tallysight-widget-config-default-tab="all"
+></div>
+```
+
+**Community only, no tab bar:**
+
+```html
+<div
+  data-tallysight-widget-type="feed"
+  data-tallysight-widget-id="all,all,plus-money-club"
+  data-tallysight-widget-config-tabs="community"
+></div>
+```
+
+**Moneyline picks only, league filters hidden:**
+
+```html
+<div
+  data-tallysight-widget-type="feed"
+  data-tallysight-widget-id="nfl,2025-26,sports-interaction"
+  data-tallysight-widget-config-tabs="verified,community"
+  data-tallysight-widget-config-market="MoneylineMarket"
+  data-tallysight-widget-config-show-filters="false"
+></div>
+```

@@ -1,0 +1,40 @@
+---
+title: "Promo Tiles widget: embed sportsbook promotional offers"
+description: "Display sportsbook promotional offers — welcome bonuses, deposit matches, and more — configured from your Tallysight workspace and embedded in one tag."
+---
+
+The Promo Tiles widget displays sportsbook promotional offers — welcome bonuses, deposit matches, and other incentives — that are configured for your Tallysight workspace. Instead of manually maintaining sportsbook offer copy, you manage your promo content once in the Tallysight dashboard and the widget reflects those changes everywhere it is embedded.
+
+## Embed code
+
+Add the SDK script tag and a `<div>` with `data-tallysight-widget-type="promo-tiles"` and your widget ID:
+
+```html
+<script
+  data-tallysight-defaults-widget-config-workspace="your-workspace"
+  type="module"
+  src="https://storage.googleapis.com/tallysight-widgets/dist/tallysight.min.js"
+></script>
+<div
+  data-tallysight-widget-type="promo-tiles"
+  data-tallysight-widget-id="your-widget-id"
+></div>
+```
+
+## What each promo tile shows
+
+Each tile in the widget represents a single sportsbook promotional offer and includes:
+
+- **Sportsbook name and icon** — the brand logo and name of the sportsbook running the offer
+- **Offer description** — a short summary of the promotion (e.g., "Bet $5, Get $200 in Bonus Bets")
+- **CTA button** — a call-to-action button with a tracked affiliate link to the sportsbook's sign-up or deposit page
+- **Rating** — a star or numeric rating for the sportsbook, if configured in your workspace
+- **Promo code** — a copyable promo code, if the offer requires one
+
+## Managing promo content
+
+Promo tile content is managed in the Tallysight dashboard under your workspace settings. Any changes you make to offer descriptions, promo codes, links, or which sportsbooks appear take effect immediately across all embedded promo tile widgets — no code changes needed on your site.
+
+<Note>
+Promo tiles are subject to your workspace's sportsbook configuration. Only sportsbooks that are active in your workspace settings will appear in the widget. Contact your Tallysight account manager to add or remove sportsbooks from your workspace.
+</Note>

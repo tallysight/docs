@@ -1,0 +1,66 @@
+---
+title: "Changelog"
+description: "Latest updates and improvements to the Tallysight platform, widgets, and SDK."
+---
+
+Stay up to date with the latest changes to Tallysight. This page lists product updates, new features, and bug fixes shipped each week.
+
+<Update label="Week of April 30, 2026" description="Geolocated community offers and per-sport live-odds buffer tuning">
+
+## Updates
+
+**Geolocated community offers**
+
+The **Offers** tab on community pages now uses the same canonical promo pipeline as the rest of the platform and filters offers by the visitor's state and country. Visitors only see promos that are actually available where they are, and offer titles fall back to the campaign name when set. See the [Promo Tiles widget](/widgets/promo-tiles) for related promo configuration.
+
+## Bug fixes
+
+- **Live odds buffer per sport**: Tuned the post-start window in which live odds stay open for sports that frequently run long or end early. Baseball and tennis markets now stay available an extra hour after scheduled start to cover extra innings and long matches, while soccer is tightened by an hour to close stale markets sooner after full time.
+
+</Update>
+
+<Update label="Week of April 27, 2026" description="Polymarket prediction markets, marketplace, and widget reliability fixes">
+
+## New features
+
+**Polymarket prediction market provider**
+
+Polymarket is now available as an odds provider alongside traditional sportsbooks. Workspaces can ingest live prediction-market prices for MLB game lines and futures (World Series, league and division winners), PGA Tour tournament winner futures, and horse racing futures (including the Kentucky Derby). Probabilities are converted to American odds and displayed inline with sportsbook prices in the [Tile](/widgets/tile) and [Odds Text](/widgets/odds-text) widgets.
+
+**Creator marketplace**
+
+A new monetization marketplace lets workspace admins surface partner brands to creators and lets creators submit interest in becoming partners. Visitors can sign up through the **Become a Creator** modal, with pending interest automatically claimed once they authenticate. Active partner cards are now grouped by category, and admins get a dedicated workspace-admin view of brand requests.
+
+**Inner-page leaderboards**
+
+Communities now have a dedicated leaderboard inner page, making it easier for members to browse rankings without leaving the community context.
+
+## Updates
+
+**Promo type selector**
+
+The promo manager now includes a Type dropdown on the Details step so you can mark a promo as either an **Offer** or a **Link** when creating or editing. Existing promos are migrated automatically.
+
+**Profile filter live reload**
+
+Sportsbook, status, result, and market filters on the profile page now refresh betslips immediately without requiring a page reload, including correctly clearing results when a filter returns no matches.
+
+**Smaller community leaderboard**
+
+The community leaderboard now hides the Money Meter, Avg Winnings, and ROI columns by default to remove horizontal scrolling on smaller screens. The full ranking table on `/rankings` is unchanged.
+
+**Unified logging and error tracking**
+
+Server, client, and widget logs now flow through a single Axiom pipeline tagged by app source, with request-level correlation IDs. Translation errors from `next-intl` are also captured. End users see no change, but support can resolve embed and pick-grading issues faster.
+
+## Bug fixes
+
+- **Bet builder**: The widget SDK no longer initializes the bet store on pages where the bet builder is disabled, eliminating `QuotaExceededError` warnings on sites with constrained `localStorage`. See the [bet builder widget](/widgets/bet-builder) reference.
+- **Promo manager**: Fixed a race condition where promos were fetched before brands and workspaces loaded, which produced 400 errors and an empty list on first paint.
+- **Manual pick grading**: Admin manual grades now correctly update the betslip's embedded pick data so leaderboards and rankings stay in sync.
+- **Cross-origin widget responses**: Widget API routes now return CORS and cache headers on error responses, so embedded widgets surface the actual error instead of an opaque network failure.
+- **Game time buffer**: Live odds for sports that can go to overtime (NBA, NFL, NHL, soccer, etc.) now stay available for an additional hour after scheduled start, preventing markets from being closed prematurely on long games.
+- **Sportsbook market mappings**: Dozens of new and corrected market mappings across BetMGM, BetRivers, Betfair, DraftKings, FanDuel, NorthStar, Sporting Bet, Sports Interaction, and bwin — covering NFL division and conference futures, MLB first‑innings markets, NBA first field-goal scorer, Premier League and Serie A goal markets, ATP/WTA tournament winners (French Open, Wimbledon), PGA first-round leader, and NHL puck line.
+- **`/about` page**: The legacy `/about` page now redirects to `tallysight.com/about` to give visitors a single canonical destination.
+
+</Update>

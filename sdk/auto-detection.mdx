@@ -1,0 +1,106 @@
+---
+title: "Auto-detect Tallysight widgets injected into the DOM"
+description: "Use MutationObserver auto-detection to automatically load widgets added to the DOM after page load — ideal for SPAs and AJAX-driven content."
+---
+
+Auto-detection uses a MutationObserver to watch the DOM for newly added widget elements. When a widget element is added dynamically — for example, by a SPA router, a content management system rendering blocks on the fly, or an AJAX request — the SDK automatically detects it and loads the corresponding widget bundle without any extra code on your part.
+
+---
+
+## When to use auto-detection
+
+Auto-detection is most useful when:
+
+- Your page is a single-page application built with React, Vue, Angular, or a similar framework, and widget elements are injected by the router or component lifecycle.
+- Content is loaded dynamically via AJAX after the initial page render.
+- A CMS or page builder injects widget elements asynchronously.
+
+If your widget elements are all present in the initial HTML, auto-detection is not necessary — the SDK already scans the DOM on load.
+
+---
+
+## Enable auto-detection
+
+You can enable auto-detection in three ways.
+
+### Method 1: Script tag attribute
+
+Add `data-tallysight-observer="true"` to the SDK `<script>` tag. This enables the MutationObserver immediately when the SDK initializes.
+
+```html
+<script
+  data-tallysight-defaults-widget-config-workspace="your-workspace"
+  data-tallysight-observer="true"
+  type="module"
+  src="https://storage.googleapis.com/tallysight-widgets/dist/tallysight.min.js"
+></script>
+```
+
+### Method 2: `enableAutoDetection()`
+
+Call `Tallysight.enableAutoDetection()` after the SDK is ready. This returns the `Tallysight` object so you can chain additional calls.
+
+```javascript
+await Tallysight.whenReady()
+Tallysight.enableAutoDetection()
+```
+
+### Method 3: `Tallysight.configure()`
+
+Pass `autoDetect: true` via `configure()`. This is useful when you want to configure multiple settings together.
+
+```javascript
+Tallysight.configure({
+  autoDetect: true,
+})
+```
+
+---
+
+## Disable auto-detection
+
+To stop watching for new widget elements, call `disableAutoDetection()`. This removes the MutationObserver and stops the SDK from automatically loading any widgets added to the DOM after the call.
+
+```javascript
+Tallysight.disableAutoDetection()
+```
+
+---
+
+## Example: adding a widget element dynamically
+
+The following example creates a widget element with JavaScript, adds it to the DOM, and lets auto-detection handle loading the bundle. No manual call to `scan()` or `loadWidget()` is needed.
+
+```javascript
+// Enable auto-detection (or set data-tallysight-observer="true" on the script tag)
+Tallysight.enableAutoDetection()
+
+// Create and configure the widget element
+const widgetEl = document.createElement("div")
+widgetEl.setAttribute("data-tallysight-widget-type", "tile")
+widgetEl.setAttribute("data-tallysight-widget-id", "67ffcc2afd37cf9e44b636ed")
+
+// Add it to the DOM — the SDK detects it and loads the bundle automatically
+document.getElementById("container").appendChild(widgetEl)
+```
+
+---
+
+## Alternative: manual scan
+
+If auto-detection is not enabled, you can trigger widget loading manually by calling `Tallysight.scan()` after adding widget elements to the DOM. Pass a CSS selector to limit the scan to a specific container and avoid re-scanning the entire document.
+
+```javascript
+// Add widget elements to the DOM first
+const widgetEl = document.createElement("div")
+widgetEl.setAttribute("data-tallysight-widget-type", "tile")
+widgetEl.setAttribute("data-tallysight-widget-id", "67ffcc2afd37cf9e44b636ed")
+document.getElementById("container").appendChild(widgetEl)
+
+// Then trigger a scan on just that container
+await Tallysight.scan("#container")
+```
+
+<Tip>
+`Tallysight.scan(selector)` returns a `Promise<number>` that resolves with the number of widgets found. You can use this to confirm widgets were detected or to log diagnostics during development.
+</Tip>

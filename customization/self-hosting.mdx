@@ -1,0 +1,74 @@
+---
+title: "Self-host Tallysight widget bundles on your domain"
+description: "Host widget bundles on your own domain to maintain script control and help mitigate potential Google Site Reputation Abuse concerns."
+---
+
+By default, Tallysight widget bundles load from the official Google Cloud Storage CDN at `https://storage.googleapis.com/tallysight-widgets/dist/`. Self-hosting lets you serve those same bundles from your own domain — giving you control over script origins and helping mitigate potential Google Site Reputation Abuse (SRA) issues that can arise when third-party scripts are loaded from external domains.
+
+## Why self-host?
+
+Serving widget bundles from your own domain has two practical benefits:
+
+- **SRA mitigation** — Google may flag pages that load content from third-party CDNs as part of Site Reputation Abuse patterns. Serving from your own domain helps avoid this.
+- **Reliability** — your delivery depends on your own infrastructure rather than an external CDN.
+
+<Note>
+  Self-hosting only affects where the JavaScript bundle files are served from. Widget data (odds, picks, branding) still comes from the Tallysight API.
+</Note>
+
+## Option 1: Reverse proxy (recommended)
+
+Set up a reverse proxy on your domain that forwards requests to the Tallysight CDN on demand. This is the recommended approach because you always serve the latest bundles automatically — no manual updates required.
+
+Configure your web server or CDN to proxy requests from `https://assets.yourdomain.com/widgets/*` to `https://storage.googleapis.com/tallysight-widgets/dist/*`, then point the SDK at your proxy:
+
+```html
+<script
+  data-tallysight-base-url="https://assets.yourdomain.com/widgets"
+  type="module"
+  src="https://storage.googleapis.com/tallysight-widgets/dist/tallysight.min.js"
+></script>
+```
+
+Or configure it programmatically after the SDK loads:
+
+```javascript
+Tallysight.configure({
+  bundleBaseUrl: "https://assets.yourdomain.com/widgets",
+})
+```
+
+## Option 2: Manual download and host
+
+Download the widget bundles from the Tallysight CDN and serve them as static files from your own server.
+
+<Steps>
+  <Step title="Download the bundles">
+    Fetch the widget bundles from `https://storage.googleapis.com/tallysight-widgets/dist/` and copy them to your hosting environment (e.g. `https://assets.yourdomain.com/widgets/`).
+  </Step>
+  <Step title="Configure the SDK base URL">
+    Point the SDK at your hosted location using the `data-tallysight-base-url` script attribute or the `bundleBaseUrl` configuration option:
+
+    ```html
+    <script
+      data-tallysight-base-url="https://assets.yourdomain.com/widgets"
+      type="module"
+      src="https://assets.yourdomain.com/widgets/tallysight.min.js"
+    ></script>
+    ```
+  </Step>
+</Steps>
+
+<Warning>
+  With manual hosting you must re-download and re-deploy bundles whenever Tallysight releases updates. If you don't, your widgets may miss bug fixes, new features, and security patches. The reverse proxy option avoids this entirely.
+</Warning>
+
+## Verify your setup
+
+After configuring a custom `bundleBaseUrl`, open your browser's network panel and confirm that widget bundle requests (e.g. `tile.js`, `feed.js`) are being served from your domain rather than `storage.googleapis.com`.
+
+You can also check that the SDK initialised correctly:
+
+```javascript
+console.log(Tallysight.getSdkState()) // "ready"
+```

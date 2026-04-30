@@ -1,0 +1,78 @@
+---
+title: "Tallysight FAQ: widgets, workspaces, odds, and SDK"
+description: "Answers to common questions about embedding Tallysight widgets, configuring workspaces, understanding odds formats, and using the JavaScript SDK."
+---
+
+This page answers the most frequently asked questions about Tallysight widgets and the SDK. If your question isn't here, check the [Troubleshooting guide](/troubleshooting) or contact support at support@tallysight.com.
+
+<AccordionGroup>
+
+<Accordion title="What is a widget ID and where do I find it?">
+A widget ID is a unique identifier for a specific widget configuration stored in the Tallysight platform. For **Tile** widgets, the ID corresponds to a specific game, futures market, or prop — you find it in the embed dialog on the odds page in the Tallysight dashboard. For **Feed** widgets, the ID is a composite string you construct yourself in the format `{sport},{event},{network}` (for example, `nba,2024-25-regular-season,the-athletic`). Use `"all"` for any segment to remove that filter.
+</Accordion>
+
+<Accordion title="Do I need to set a workspace on every widget element?">
+No. You can set a default workspace for all widgets on a page using the `data-tallysight-defaults-widget-config-workspace` attribute on the SDK script tag:
+
+```html
+<script
+  data-tallysight-defaults-widget-config-workspace="your-workspace-slug"
+  type="module"
+  src="https://storage.googleapis.com/tallysight-widgets/dist/tallysight.min.js"
+></script>
+```
+
+Any widget element that doesn't specify its own `data-tallysight-widget-config-workspace` attribute will inherit this default.
+</Accordion>
+
+<Accordion title="What is the difference between 'workspace', 'org', 'network', and 'organization'?">
+These are interchangeable terms for the same thing — the multi-tenant organizational unit on Tallysight that groups users, widget configurations, and branding. "Workspace" is the preferred term in current documentation and the platform UI. You may see "org", "network", or "organization" in older integrations or legacy embed codes.
+</Accordion>
+
+<Accordion title="Can I embed widgets on a WordPress site?">
+Yes. Tallysight widgets support a WordPress shortcode format in addition to the standard HTML embed. Example:
+
+```
+[tallysight-widget type="tile" id="67ffcc2afd37cf9e44b636ed" config-workspace="the-athletic" config-odds-by="best-odds"]
+```
+
+You still need to include the SDK script tag — add it to your theme's `header.php` or use a plugin that allows custom scripts in the `<head>`.
+</Accordion>
+
+<Accordion title="Will widgets slow down my page?">
+Tallysight widgets are designed for performance. The SDK (`tallysight.min.js`) is small and loads asynchronously. Individual widget bundles are loaded on demand — only the widget types you actually use are downloaded. You can further improve performance by enabling lazy loading, which defers bundle loading until a widget is near the viewport:
+
+```html
+<script
+  data-tallysight-widget-loading="lazy"
+  type="module"
+  src="https://storage.googleapis.com/tallysight-widgets/dist/tallysight.min.js"
+></script>
+```
+</Accordion>
+
+<Accordion title="Will Tallysight widgets conflict with my site's CSS?">
+No. All embedded Tallysight widgets use **Shadow DOM** for style isolation. Your page's CSS cannot reach inside the widget, and the widget's CSS cannot leak out to affect your page layout.
+</Accordion>
+
+<Accordion title="What odds formats are supported?">
+Tallysight supports three odds display formats: **American** (e.g. `-110`), **Decimal** (e.g. `1.91`), and **Fractional** (e.g. `10/11`). If you don't specify a format, the SDK automatically selects one based on the visitor's geolocation. You can override this with the `config-format` attribute on a Tile widget element.
+</Accordion>
+
+<Accordion title="Can I show odds from a specific sportsbook?">
+Yes. Use `data-tallysight-widget-config-odds-by` on a Tile widget element (or set it as a default on the script tag). Pass a sportsbook slug or `"best-odds"` to show the best available odds across all integrated sportsbooks in your workspace.
+</Accordion>
+
+<Accordion title="What happens if a widget fails to load?">
+If a widget bundle fails to load (network error, invalid ID, etc.), the widget element remains empty — it does not show an error message to visitors. Check the browser console for diagnostic output. You can also check SDK state with `Tallysight.getSdkState()` and manually retry with `Tallysight.scan()` or `Tallysight.loadWidget({ element })`.
+</Accordion>
+
+<Accordion title="Can I track widget interactions in my analytics?">
+Yes. The SDK includes built-in analytics tracking and exposes `Tallysight.trackCustomEvent(name, props?, domain?)` for custom event tracking. Page views are tracked automatically when Tallysight widgets are present on a page.
+</Accordion>
+
+<Accordion title="Can I use Tallysight widgets in a React application?">
+Yes. The JavaScript SDK works in any web application regardless of framework. Add the SDK script tag to your HTML entry point (e.g., `public/index.html` or `index.html`) and place widget elements in your rendered HTML or component templates. For dynamically injected elements, enable auto-detection with `data-tallysight-observer="true"` or call `Tallysight.scan()` after your component mounts.
+</Accordion>
+
+</AccordionGroup>

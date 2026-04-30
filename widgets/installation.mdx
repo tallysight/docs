@@ -1,0 +1,105 @@
+---
+title: "Install Tallysight widgets: SDK setup and embedding"
+description: "Add the Tallysight SDK script tag to any page, configure your workspace, and drop in a widget element to start showing live betting data."
+---
+
+Tallysight widgets load in two steps: you add a single SDK script tag to your page, then place one or more widget elements wherever you want a widget to appear. The SDK detects those elements automatically and loads the correct widget bundle from Tallysight's CDN.
+
+## Step 1: Add the SDK script tag
+
+Place the following `<script>` tag in your HTML, ideally in the `<head>` or just before the closing `</body>` tag:
+
+```html
+<script
+  type="module"
+  src="https://storage.googleapis.com/tallysight-widgets/dist/tallysight.min.js"
+></script>
+```
+
+The `type="module"` attribute is required. It tells the browser to treat the file as an ES module, which is how the SDK loads widget bundles on demand without blocking page rendering.
+
+## Step 2: Configure your workspace
+
+Add a `data-tallysight-defaults-widget-config-workspace` attribute to the script tag with your workspace slug. This scopes all widgets on the page to your workspace's branding and sportsbook configuration:
+
+```html
+<script
+  data-tallysight-defaults-widget-config-workspace="your-workspace"
+  type="module"
+  src="https://storage.googleapis.com/tallysight-widgets/dist/tallysight.min.js"
+></script>
+```
+
+Any config attribute prefixed with `data-tallysight-defaults-widget-config-` applies to every widget on the page as a default. Individual widgets can override these defaults with their own `data-tallysight-widget-config-*` attributes.
+
+## Step 3: Add widget elements
+
+Place a `<span>` or `<div>` element with `data-tallysight-widget-type` and `data-tallysight-widget-id` wherever you want a widget to render:
+
+```html
+<span
+  data-tallysight-widget-type="tile"
+  data-tallysight-widget-id="67ffcc2afd37cf9e44b636ed"
+></span>
+```
+
+The SDK scans the DOM on load, finds elements with `data-tallysight-widget-type`, and replaces each one with the corresponding widget.
+
+### Widget element attributes
+
+| Attribute | Required | Description |
+|---|---|---|
+| `data-tallysight-widget-type` | Yes | Widget type: `tile`, `feed`, `betslip`, `odds-text`, `promo-tiles`, or `bet-builder` |
+| `data-tallysight-widget-id` | Yes (except `bet-builder`) | Widget config ID from the Tallysight dashboard |
+| `data-tallysight-widget-config-*` | No | Per-widget configuration options (e.g., `data-tallysight-widget-config-format="decimal"`) |
+| `data-tallysight-widget-loading` | No | Loading strategy: `eager`, `lazy`, or `auto` (default: `auto`) |
+
+The `data-tallysight-widget-loading` attribute controls when the widget bundle is fetched:
+
+- **`eager`** — loads immediately, regardless of any global setting
+- **`lazy`** — loads only when the widget approaches the viewport (uses IntersectionObserver)
+- **`auto`** — follows the global lazy loading setting on the script tag (default)
+
+## WordPress shortcode format
+
+If you use the Tallysight WordPress plugin, you can embed widgets using shortcodes instead of raw HTML:
+
+```
+[tallysight-widget type="tile" id="67ffcc2afd37cf9e44b636ed" config-workspace="the-athletic" config-odds-by="best-odds"]
+```
+
+Shortcode attributes map directly to their `data-tallysight-widget-config-*` counterparts. Omit the `data-tallysight-widget-config-` prefix and use the remaining portion as the attribute name.
+
+## Complete example
+
+Here is a full HTML page that loads the SDK and embeds a tile widget:
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Sports Page</title>
+    <script
+      data-tallysight-defaults-widget-config-workspace="your-workspace"
+      type="module"
+      src="https://storage.googleapis.com/tallysight-widgets/dist/tallysight.min.js"
+    ></script>
+  </head>
+  <body>
+    <h1>Tonight's Game</h1>
+
+    <span
+      data-tallysight-widget-type="tile"
+      data-tallysight-widget-id="67ffcc2afd37cf9e44b636ed"
+      data-tallysight-widget-config-odds-by="best-odds"
+      data-tallysight-widget-config-format="american"
+    ></span>
+  </body>
+</html>
+```
+
+<Tip>
+You only need one script tag per page, even if you embed multiple widgets. The SDK loads each widget bundle on demand and shares the configuration across all widget elements on the page.
+</Tip>

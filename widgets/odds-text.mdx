@@ -1,0 +1,48 @@
+---
+title: "Odds Text widget: show live inline odds in articles"
+description: "Display live betting odds inline within article text using the Odds Text widget — no card, no layout, just the current number in your sentence."
+---
+
+The Odds Text widget lets you display live betting odds inline within article text. Instead of a full odds card, you get a small formatted number that updates automatically — useful for placing the current line next to a team name or bet mention in a sentence without interrupting the reading flow.
+
+## Use case
+
+Inline odds are ideal for articles that reference a specific bet in prose. For example: "The Lakers enter tonight's game as 4.5-point favorites" — where the spread value comes from a live Odds Text widget rather than being hard-coded. The number stays current without any editorial updates.
+
+## Embed code
+
+Place the SDK script tag once on the page, then add a `<span>` with `data-tallysight-widget-type="odds-text"` inline in your article content:
+
+```html
+<script
+  data-tallysight-defaults-widget-config-workspace="your-workspace"
+  type="module"
+  src="https://storage.googleapis.com/tallysight-widgets/dist/tallysight.min.js"
+></script>
+
+<p>
+  The Lakers open as
+  <span
+    data-tallysight-widget-type="odds-text"
+    data-tallysight-widget-id="your-widget-id"
+    data-tallysight-widget-config-odds-by="best-odds"
+  ></span>
+  favorites against the Celtics tonight.
+</p>
+```
+
+## Controlling the odds source
+
+The `config-odds-by` attribute controls which sportsbook's odds the widget displays. Set it to `best-odds` to show the best available line across all sportsbooks in your workspace, or pass a specific sportsbook slug to pin the widget to a single book:
+
+```html
+<span
+  data-tallysight-widget-type="odds-text"
+  data-tallysight-widget-id="your-widget-id"
+  data-tallysight-widget-config-odds-by="draftkings"
+></span>
+```
+
+## How it renders
+
+The widget renders as an inline element containing the formatted odds value — for example, `-4.5` or `+110`. It fits naturally into a sentence alongside surrounding text. The odds format follows the same geolocation-based auto-detection used by other Tallysight widgets: American odds for US visitors, decimal for European visitors, and so on. You can override this with `data-tallysight-widget-config-format` if you need a fixed format.

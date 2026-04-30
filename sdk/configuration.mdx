@@ -1,0 +1,137 @@
+---
+title: "Configure the Tallysight SDK: attributes and options"
+description: "Set data- attributes on the SDK script tag or call Tallysight.configure() to control lazy loading, auto-detection, bet builder, and widget defaults."
+---
+
+The SDK reads configuration from `data-` attributes on the `<script>` tag at load time and can also be updated at runtime using `Tallysight.configure()`. Script tag attributes are applied first; programmatic calls override them at any point after the SDK initializes.
+
+## Script tag attributes
+
+Add these attributes directly to the Tallysight `<script>` tag to configure the SDK before it initializes.
+
+| Attribute | Value | Description |
+|---|---|---|
+| `data-tallysight-observer` | `"true"` | Enables a MutationObserver to automatically load widgets added to the DOM after page load |
+| `data-tallysight-widget-loading` | `"lazy"` | Enables IntersectionObserver lazy loading globally for all widgets |
+| `data-tallysight-bet-builder-enabled` | `"true"` | Initializes the bet builder widget on page load |
+| `data-tallysight-base-url` | URL string | Custom base URL for widget bundles (e.g., your own CDN or reverse proxy) |
+| `data-tallysight-analytics-enabled` | `"false"` | Disables built-in analytics page view tracking |
+| `data-tallysight-defaults-widget-config-*` | Any string | Default configuration applied to all widget elements on the page |
+| `data-tallysight-overrides-widget-config-*` | Any string | Override configuration forced onto all widget elements, even if a widget specifies its own value |
+
+```html
+<script
+  data-tallysight-defaults-widget-config-workspace="sports-interaction"
+  data-tallysight-observer="true"
+  data-tallysight-widget-loading="lazy"
+  data-tallysight-bet-builder-enabled="true"
+  data-tallysight-base-url="https://assets.yourdomain.com/widgets"
+  type="module"
+  src="https://storage.googleapis.com/tallysight-widgets/dist/tallysight.min.js"
+></script>
+```
+
+---
+
+## Programmatic configuration
+
+Call `Tallysight.configure(options)` at any point after the SDK initializes to update configuration at runtime. The method returns `Tallysight` so you can chain additional calls.
+
+| Option | Type | Default | Description |
+|---|---|---|---|
+| `autoDetect` | boolean | `false` | Automatically detects and loads widgets when the DOM changes |
+| `bundleBaseUrl` | string | `"https://storage.googleapis.com/tallysight-widgets/dist"` | Base URL used to construct widget bundle URLs |
+| `betBuilder.enabled` | boolean | `false` | Initializes the bet builder widget immediately when set to `true` |
+
+```javascript
+Tallysight.configure({
+  autoDetect: true,
+  bundleBaseUrl: "https://assets.yourdomain.com/widgets",
+  betBuilder: { enabled: true },
+})
+```
+
+You can chain `configure()` with other SDK methods:
+
+```javascript
+Tallysight
+  .configure({ autoDetect: true })
+  .enableLazyLoading()
+```
+
+---
+
+## Default and override widget config propagation
+
+The `data-tallysight-defaults-widget-config-*` and `data-tallysight-overrides-widget-config-*` attributes let you apply configuration to every widget on the page from a single place on the script tag, rather than repeating the same attribute on each widget element.
+
+### Defaults
+
+A `data-tallysight-defaults-widget-config-*` attribute sets a fallback value for all widgets. Any individual widget that specifies its own value for that config key takes precedence over the default.
+
+For example, `data-tallysight-defaults-widget-config-workspace="the-athletic"` applies the `the-athletic` workspace to every widget on the page. A widget element that also sets `data-tallysight-widget-config-workspace="sports-interaction"` will use `sports-interaction` instead.
+
+```html
+<!-- Script tag sets a default workspace for every widget -->
+<script
+  data-tallysight-defaults-widget-config-workspace="the-athletic"
+  type="module"
+  src="https://storage.googleapis.com/tallysight-widgets/dist/tallysight.min.js"
+></script>
+
+<!-- This widget uses the default workspace ("the-athletic") -->
+<span
+  data-tallysight-widget-type="tile"
+  data-tallysight-widget-id="67ffcc2afd37cf9e44b636ed"
+></span>
+
+<!-- This widget overrides the workspace with its own value -->
+<span
+  data-tallysight-widget-type="tile"
+  data-tallysight-widget-id="67ffcc2afd37cf9e44b636ee"
+  data-tallysight-widget-config-workspace="sports-interaction"
+></span>
+```
+
+### Overrides
+
+A `data-tallysight-overrides-widget-config-*` attribute forces a value onto every widget, regardless of what a widget element specifies for itself. Use overrides when you need to enforce a consistent config — for example, locking all widgets to a specific odds format.
+
+```html
+<!-- Force decimal odds on every widget, no exceptions -->
+<script
+  data-tallysight-overrides-widget-config-format="decimal"
+  type="module"
+  src="https://storage.googleapis.com/tallysight-widgets/dist/tallysight.min.js"
+></script>
+
+<!-- Widget config-format is ignored; decimal is enforced by the override -->
+<span
+  data-tallysight-widget-type="tile"
+  data-tallysight-widget-id="67ffcc2afd37cf9e44b636ed"
+  data-tallysight-widget-config-format="american"
+></span>
+```
+
+<Note>
+Defaults and overrides work for any `data-tallysight-widget-config-*` key, not just `workspace` and `format`. For example, `data-tallysight-defaults-widget-config-odds-by="best-odds"` sets a default sportsbook selection for every widget on the page.
+</Note>
+
+---
+
+## Self-hosting widget bundles
+
+By default, the SDK loads widget bundles from `https://storage.googleapis.com/tallysight-widgets/dist`. You can point the SDK at your own domain by setting `data-tallysight-base-url` or `bundleBaseUrl` in `configure()`.
+
+Tallysight recommends a reverse proxy over a manual download because a proxy always serves the latest bundles without requiring you to re-download files.
+
+```javascript
+// Point the SDK at your own domain
+Tallysight.configure({
+  bundleBaseUrl: "https://assets.yourdomain.com/widgets",
+})
+```
+
+<Warning>
+If you download and host bundles manually, you must re-download them periodically to pick up new features, bug fixes, and security patches.
+</Warning>

@@ -1,0 +1,106 @@
+---
+title: "Quickstart: embed your first Tallysight odds widget"
+description: "Add your first Tallysight odds widget to any web page in under five minutes using a single script tag, one HTML element, and your workspace slug."
+---
+
+This guide walks you through embedding your first Tallysight widget on a web page. By the end you'll have a live odds tile loading from the CDN, configured with your workspace, and verified as working in the browser. The only prerequisite is a widget ID from your Tallysight dashboard and an HTML page you can edit.
+
+<Steps>
+  <Step title="Add the SDK script tag">
+    Paste the following `<script>` tag into the `<head>` or at the bottom of the `<body>` of your HTML page:
+
+    ```html
+    <script
+      src="https://storage.googleapis.com/tallysight-widgets/dist/tallysight.min.js"
+      type="module"
+    ></script>
+    ```
+
+    The `type="module"` attribute is required. The SDK loads asynchronously and initializes as soon as the DOM is ready — it will not block your page render.
+
+  </Step>
+  <Step title="Add a widget element">
+    Place an HTML element where you want the widget to appear. Use `data-tallysight-widget-type` to tell the SDK which widget to load, and `data-tallysight-widget-id` to identify the specific content:
+
+    ```html
+    <span
+      data-tallysight-widget-type="tile"
+      data-tallysight-widget-id="YOUR_WIDGET_ID"
+    ></span>
+    ```
+
+    The SDK scans the page for elements with `data-tallysight-widget-type` and loads the matching widget bundle into each one. You can use any block or inline element — `<div>`, `<span>`, `<section>`, or similar.
+
+    <Note>
+      Widget IDs come from the Tallysight platform. Open the tile or feed you want to embed, click the **Embed** button in the dashboard, and copy the ID shown in the embed dialog.
+    </Note>
+
+  </Step>
+  <Step title="Configure your workspace">
+    Add your workspace slug to the script tag using the `data-tallysight-defaults-widget-config-workspace` attribute. This applies your workspace's sportsbook affiliations and branding to every widget on the page without you having to repeat the setting on each element:
+
+    ```html
+    <script
+      src="https://storage.googleapis.com/tallysight-widgets/dist/tallysight.min.js"
+      data-tallysight-defaults-widget-config-workspace="your-workspace-slug"
+      type="module"
+    ></script>
+    ```
+
+    Replace `your-workspace-slug` with the slug shown in your Tallysight workspace settings. If you skip this step, widgets will still load but will not apply workspace-specific odds links or branding.
+
+  </Step>
+  <Step title="Verify it's working">
+    Open the page in a browser and check the browser console. A correctly initialized SDK logs no errors and responds to the following calls:
+
+    ```javascript
+    Tallysight.getSdkState()  // returns "ready"
+    Tallysight.isReady()      // returns true
+    ```
+
+    If `getSdkState()` returns `"error"`, check that:
+
+    - The script tag URL is correct and your network can reach it
+    - `type="module"` is present on the script tag
+    - `data-tallysight-widget-type` and `data-tallysight-widget-id` are spelled correctly on each widget element
+    - No Content Security Policy on your site is blocking scripts from `storage.googleapis.com`
+
+  </Step>
+</Steps>
+
+## Complete example
+
+Here is a minimal HTML page that puts all four steps together:
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Sports Page</title>
+
+    <!-- Step 1 & 3: SDK script tag with workspace configured -->
+    <script
+      src="https://storage.googleapis.com/tallysight-widgets/dist/tallysight.min.js"
+      data-tallysight-defaults-widget-config-workspace="your-workspace-slug"
+      type="module"
+    ></script>
+  </head>
+  <body>
+    <h1>Today's best bet</h1>
+
+    <!-- Step 2: Widget element -->
+    <span
+      data-tallysight-widget-type="tile"
+      data-tallysight-widget-id="YOUR_WIDGET_ID"
+    ></span>
+  </body>
+</html>
+```
+
+Save the file, open it in a browser, and your odds tile will appear where the `<span>` element is.
+
+## Next steps
+
+Once your first widget is live, visit [the full widget installation guide](/widgets/installation) to explore all available widget types — Tile, Feed, Betslip, Odds Text, Promo Tiles, and Bet Builder — and learn the additional attributes each one supports.

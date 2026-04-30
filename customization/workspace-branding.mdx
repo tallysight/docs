@@ -1,0 +1,87 @@
+---
+title: "Apply your workspace brand colors to Tallysight widgets"
+description: "Set custom colors for light and dark mode once in the Tallysight dashboard, and every widget embedded with your workspace slug picks them up automatically."
+---
+
+Workspace branding lets you apply your organization's colors to every widget embedded on your site. You set branding once in the Tallysight dashboard and it propagates automatically to all widgets that reference your workspace slug — no per-widget style configuration required.
+
+## How branding is applied
+
+When a widget loads, it reads the `workspace` config value and fetches your workspace's branding from the Tallysight API. The API response contains your light and dark color palettes, which the widget applies via CSS variables inside its Shadow DOM.
+
+You pass your workspace slug to widgets using the `data-tallysight-widget-config-workspace` attribute on the widget element, or use `data-tallysight-defaults-widget-config-workspace` on the script tag to set it for every widget on the page at once.
+
+## Branding properties
+
+Each workspace defines 24 color properties — 12 for light mode and 12 for dark mode. The properties are grouped into three categories:
+
+**Border colors**
+
+| Property | Purpose |
+|----------|---------|
+| `borderAccent` | Highlighted borders |
+| `borderPrimary` | Default borders |
+| `borderSecondary` | Subtle borders |
+| `borderTertiary` | Faintest borders |
+
+**Background colors**
+
+| Property | Purpose |
+|----------|---------|
+| `backgroundAccent` | Highlighted backgrounds |
+| `backgroundPrimary` | Main widget background |
+| `backgroundSecondary` | Card backgrounds |
+| `backgroundTertiary` | Nested container backgrounds |
+
+**Text colors**
+
+| Property | Purpose |
+|----------|---------|
+| `textAccent` | Highlighted text — links and emphasis |
+| `textPrimary` | Main body text |
+| `textSecondary` | Muted and secondary text |
+| `textTertiary` | Placeholder and disabled text |
+
+Each property exists for both `light` and `dark` themes.
+
+## Setting your workspace slug
+
+The recommended way to apply your workspace to all widgets on a page is to set `data-tallysight-defaults-widget-config-workspace` on the script tag:
+
+```html
+<script
+  data-tallysight-defaults-widget-config-workspace="your-workspace-slug"
+  type="module"
+  src="https://storage.googleapis.com/tallysight-widgets/dist/tallysight.min.js"
+></script>
+```
+
+<Tip>
+Setting `data-tallysight-defaults-widget-config-workspace` on the script tag applies your workspace to every widget on the page in one place. You don't need to add the attribute to each individual widget element.
+</Tip>
+
+## Brand precedence
+
+If you need a single widget to use a different workspace, set `data-tallysight-widget-config-workspace` directly on that widget element. A per-widget value always takes precedence over the script-level default.
+
+```html
+<!-- Script tag sets the default workspace for all widgets -->
+<script
+  data-tallysight-defaults-widget-config-workspace="your-workspace-slug"
+  type="module"
+  src="https://storage.googleapis.com/tallysight-widgets/dist/tallysight.min.js"
+></script>
+
+<!-- This widget uses the default workspace -->
+<span
+  data-tallysight-widget-type="tile"
+  data-tallysight-widget-id="67ffcc2afd37cf9e44b636ed"
+></span>
+
+<!-- This widget overrides the default with its own workspace -->
+<span
+  data-tallysight-widget-type="tile"
+  data-tallysight-widget-id="67ffcc2afd37cf9e44b636ee"
+  data-tallysight-widget-config-workspace="other-workspace-slug"
+></span>
+```

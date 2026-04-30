@@ -1,0 +1,270 @@
+---
+title: "Tallysight JavaScript SDK API reference (window.Tallysight)"
+description: "Complete reference for all window.Tallysight methods — parameters, return values, and examples for scanning, loading, and configuring widgets."
+---
+
+The Tallysight SDK exposes a global `window.Tallysight` object with methods for scanning, loading, and configuring widgets. All methods are available after the SDK finishes initializing.
+
+<Note>
+Before calling SDK methods, confirm the SDK is ready. Use `Tallysight.isReady()` for a synchronous check, or `await Tallysight.whenReady()` to wait for initialization to complete before proceeding.
+</Note>
+
+## `Tallysight.scan([selector])`
+
+Scans the DOM for elements with `data-tallysight-widget-type` and loads the corresponding widget bundles. Call this after adding widget elements to the page dynamically.
+
+**Parameters**
+
+<ParamField path="selector" type="string">
+  Optional CSS selector to limit the search scope. If omitted, the entire document is scanned.
+</ParamField>
+
+**Returns:** `Promise<number>` — resolves with the number of widget elements found.
+
+```javascript
+// Scan the entire document
+const count = await Tallysight.scan()
+console.log(`Found ${count} widgets`)
+
+// Scan only within a specific container
+const count = await Tallysight.scan("#my-widgets-container")
+```
+
+---
+
+## `Tallysight.loadWidget(params)`
+
+Loads a single widget by referencing a specific DOM element or a widget type name. Use this when you need to load a widget directly rather than triggering a full DOM scan.
+
+**Parameters**
+
+<ParamField path="params" type="object" required>
+  An object with either `element` or `type`. If both are provided, `element` takes precedence.
+
+  <ParamField path="params.element" type="HTMLElement">
+    The DOM element to load a widget for.
+  </ParamField>
+
+  <ParamField path="params.type" type="string">
+    The widget type name (e.g., `"tile"`, `"feed"`). Used only when `element` is not provided.
+  </ParamField>
+</ParamField>
+
+**Returns:** `Promise<void>` — resolves when the widget bundle is loaded and initialized.
+
+```javascript
+// Load a widget for a specific element
+const el = document.getElementById("my-widget")
+await Tallysight.loadWidget({ element: el })
+
+// Load a widget by type
+await Tallysight.loadWidget({ type: "tile" })
+```
+
+---
+
+## `Tallysight.configure(options)`
+
+Updates the SDK configuration at runtime. Returns the `Tallysight` object so you can chain calls.
+
+**Parameters**
+
+<ParamField path="options" type="object" required>
+  Configuration options to apply.
+
+  <ParamField path="options.autoDetect" type="boolean" default="false">
+    When `true`, enables a MutationObserver that automatically loads widgets added to the DOM after page load.
+  </ParamField>
+
+  <ParamField path="options.bundleBaseUrl" type="string" default="https://storage.googleapis.com/tallysight-widgets/dist">
+    Base URL for widget bundles. The SDK constructs each bundle URL as `${bundleBaseUrl}/${widget-type}.js`. Override this to serve bundles from your own domain.
+  </ParamField>
+
+  <ParamField path="options.betBuilder" type="object">
+    <ParamField path="options.betBuilder.enabled" type="boolean" default="false">
+      When `true`, automatically initializes the bet builder widget on page load.
+    </ParamField>
+  </ParamField>
+</ParamField>
+
+**Returns:** `Tallysight` (chainable)
+
+```javascript
+Tallysight.configure({
+  autoDetect: true,
+  bundleBaseUrl: "https://assets.yourdomain.com/widgets",
+  betBuilder: { enabled: true },
+})
+
+// Chaining
+Tallysight
+  .configure({ autoDetect: true })
+  .enableLazyLoading()
+```
+
+---
+
+## `Tallysight.preloadWidget(type)`
+
+Fetches and caches a widget bundle without initializing or rendering it. Use this to warm up a bundle you expect to need soon, so the widget appears instantly when called.
+
+**Parameters**
+
+<ParamField path="type" type="string" required>
+  The widget type to preload (e.g., `"odds-text"`, `"tile"`).
+</ParamField>
+
+**Returns:** `Promise<void>` — resolves when the bundle is cached.
+
+```javascript
+Tallysight.preloadWidget("odds-text")
+  .then(() => console.log("Bundle ready"))
+  .catch((err) => console.error("Preload failed", err))
+```
+
+---
+
+## `Tallysight.enableAutoDetection()` / `Tallysight.disableAutoDetection()`
+
+Enables or disables the MutationObserver that watches for widget elements added to the DOM after the initial page load. Both methods return `Tallysight` for chaining.
+
+**Returns:** `Tallysight` (chainable)
+
+```javascript
+// Enable
+Tallysight.enableAutoDetection()
+
+// Disable
+Tallysight.disableAutoDetection()
+
+// Chaining
+Tallysight.enableAutoDetection().enableLazyLoading()
+```
+
+<Tip>
+Auto-detection is useful for single-page applications where widget elements are injected by a router or framework. See [Auto-detect dynamically injected widgets](/sdk/auto-detection) for full details.
+</Tip>
+
+---
+
+## `Tallysight.enableLazyLoading()` / `Tallysight.disableLazyLoading()`
+
+Enables or disables IntersectionObserver-based lazy loading for widget bundles. When lazy loading is enabled, a widget bundle is fetched only when the widget element approaches the viewport. Both methods return `Tallysight` for chaining.
+
+**Returns:** `Tallysight` (chainable)
+
+```javascript
+// Enable
+Tallysight.enableLazyLoading()
+
+// Disable — any pending lazy widgets load immediately
+Tallysight.disableLazyLoading()
+```
+
+<Tip>
+See [Lazy load widgets for faster pages](/sdk/lazy-loading) for global and per-widget configuration options.
+</Tip>
+
+---
+
+## `Tallysight.enableBetBuilder()` / `Tallysight.disableBetBuilder()`
+
+Enables or disables the bet builder widget at runtime.
+
+When you call `enableBetBuilder()`, the SDK creates a bet builder widget element, appends it to the document body, and loads the bundle. When you call `disableBetBuilder()`, all bet builder elements are removed from the DOM and their state is cleaned up.
+
+**Returns**
+
+- `enableBetBuilder()` — `Promise<boolean>`: resolves to `true` if the bet builder was successfully created, `false` otherwise.
+- `disableBetBuilder()` — `boolean`: `true` if the bet builder was successfully removed, `false` otherwise.
+
+```javascript
+// Enable
+const success = await Tallysight.enableBetBuilder()
+if (!success) {
+  console.warn("Bet builder could not be enabled")
+}
+
+// Disable
+Tallysight.disableBetBuilder()
+
+// Conditional toggle
+if (userWantsBetBuilder) {
+  Tallysight.enableBetBuilder()
+} else {
+  Tallysight.disableBetBuilder()
+}
+```
+
+<Warning>
+The bet builder requires the bet store to be initialized. If the bet store is not available, the SDK logs a warning and `enableBetBuilder()` returns `false`.
+</Warning>
+
+---
+
+## `Tallysight.trackCustomEvent(name, props?, domain?)`
+
+Tracks a custom analytics event. Use this to log interactions that matter to your integration, such as a user clicking a widget or navigating to a sportsbook.
+
+**Parameters**
+
+<ParamField path="name" type="string" required>
+  The event name to record.
+</ParamField>
+
+<ParamField path="props" type="object">
+  Optional key-value pairs of custom properties attached to the event.
+</ParamField>
+
+<ParamField path="domain" type="string">
+  Optional domain override. Defaults to the current page domain.
+</ParamField>
+
+**Returns:** `Promise<void>`
+
+```javascript
+await Tallysight.trackCustomEvent("widget_interaction", {
+  widget_type: "tile",
+  sportsbook: "draftkings",
+})
+```
+
+---
+
+## `Tallysight.isReady()` / `Tallysight.whenReady()`
+
+Check whether the SDK has finished initializing.
+
+- `isReady()` — synchronous check; returns `true` if the SDK is in the `"ready"` state, `false` otherwise.
+- `whenReady()` — returns a `Promise<void>` that resolves as soon as the SDK reaches the `"ready"` state. If the SDK is already ready, the promise resolves immediately.
+
+```javascript
+// Synchronous check
+if (Tallysight.isReady()) {
+  Tallysight.scan()
+}
+
+// Async — wait for the SDK before calling other methods
+await Tallysight.whenReady()
+await Tallysight.scan()
+```
+
+---
+
+## `Tallysight.getSdkState()`
+
+Returns the current initialization state of the SDK as a string.
+
+**Returns:** `string` — one of `"pending"`, `"initializing"`, `"ready"`, or `"error"`.
+
+```javascript
+const state = Tallysight.getSdkState()
+console.log(state) // "ready"
+```
+
+| State | Meaning |
+|---|---|
+| `"pending"` | The SDK script has loaded but initialization has not started yet |
+| `"initializing"` | The SDK is actively initializing modules |
+| `"ready"` | Initialization is complete; all methods are available |
+| `"error"` | Initialization failed; check the browser console for details |

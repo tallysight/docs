@@ -1,0 +1,39 @@
+---
+title: "Betslip widget: embed a standalone analyst pick slip"
+description: "Embed a single analyst betslip card showing picks, odds, win/loss record, and direct links to sportsbooks — anywhere on your site."
+---
+
+The Betslip widget displays a single analyst's betslip with their picks, the odds at the time the slip was published, the analyst's win/loss record, and links to current odds at relevant sportsbooks. It is the card-level building block of the Tallysight picks experience, and it also powers each individual card inside the Feed widget.
+
+## Embed code
+
+Add the SDK script tag and a `<div>` with `data-tallysight-widget-type="betslip"` and your betslip ID:
+
+```html
+<script
+  data-tallysight-defaults-widget-config-workspace="your-workspace"
+  type="module"
+  src="https://storage.googleapis.com/tallysight-widgets/dist/tallysight.min.js"
+></script>
+<div
+  data-tallysight-widget-type="betslip"
+  data-tallysight-widget-id="your-betslip-id"
+></div>
+```
+
+## What a betslip shows
+
+Each embedded betslip card includes:
+
+- **Analyst profile** — avatar, display name, and a link to the analyst's public profile
+- **Picks with odds** — each pick in the slip with the market, selection, and odds as published
+- **Win/loss record** — the analyst's overall record or recent performance stats
+- **Odds links** — current odds from sportsbooks associated with your workspace, with affiliate links where configured
+
+## Getting betslip IDs
+
+The betslip ID is the numeric identifier for a specific published betslip on the Tallysight platform. You can find it in the URL when viewing a betslip — for example, `https://tallysight.com/betslips/123456` has the ID `123456`. You can also copy the ID from the share dialog on any betslip card.
+
+<Note>
+The Betslip widget is the same component used inside the Feed widget to render each individual card in the picks feed. Embedding a Betslip widget directly gives you a standalone version of that same card without the feed's pagination and filter controls.
+</Note>

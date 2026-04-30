@@ -1,0 +1,122 @@
+---
+title: "Fix common Tallysight widget and SDK loading problems"
+description: "Diagnose and fix the most common Tallysight widget problems: SDK not loading, missing widgets, CSP errors, branding issues, and SPA navigation."
+---
+
+Most widget problems fall into one of a few categories: the SDK not loading, a widget element not being detected, a configuration mismatch, or a Content Security Policy (CSP) blocking requests. This page walks through the most common issues and how to fix them.
+
+## Widget not loading or not appearing
+
+If a widget element exists on the page but nothing renders, work through these checks:
+
+**1. Confirm the SDK is ready**
+
+Open your browser's JavaScript console and run:
+
+```javascript
+console.log(Tallysight.getSdkState())
+```
+
+The expected result is `"ready"`. If you see `"pending"` or `"initializing"`, the SDK hasn't finished loading yet. If you see `"error"`, there was a problem during initialization — check the console for error messages.
+
+**2. Check the `data-tallysight-widget-type` attribute**
+
+The value must exactly match a supported widget type (case-sensitive):
+
+- `tile`
+- `feed`
+- `betslip`
+- `odds-text`
+- `promo-tiles`
+- `bet-builder`
+
+**3. Check the `data-tallysight-widget-id` attribute**
+
+The widget ID must match a valid config in the Tallysight platform. Widget IDs are found in the embed dialog on each tile or feed in the Tallysight dashboard. An incorrect or missing ID causes the widget to fail silently.
+
+**4. Manually trigger a scan**
+
+If auto-detection is disabled, call `Tallysight.scan()` after the widget element is in the DOM:
+
+```javascript
+Tallysight.scan()
+```
+
+Or load a specific widget element directly:
+
+```javascript
+const el = document.getElementById("my-widget")
+Tallysight.loadWidget({ element: el })
+```
+
+## Script tag not loading
+
+Check that the `<script>` tag has `type="module"` — the SDK is an ES module and will not execute without it:
+
+```html
+<script
+  type="module"
+  src="https://storage.googleapis.com/tallysight-widgets/dist/tallysight.min.js"
+></script>
+```
+
+Also verify that your network can reach `storage.googleapis.com`. Some corporate proxies or firewall rules block requests to GCS. If this is the case, consider [self-hosting the widget bundles](/customization/self-hosting).
+
+## Content Security Policy (CSP) blocking widgets
+
+If your site sets a `Content-Security-Policy` header, it must allow:
+
+- **`script-src`**: `https://storage.googleapis.com` (or your self-hosted domain)
+- **`connect-src`**: your Tallysight API domain
+
+If you see CSP errors in the browser console, update your policy to include the widget CDN origins, or [self-host](/customization/self-hosting) to serve bundles from a domain already in your policy.
+
+## Workspace branding not applying
+
+If widgets appear but don't show your colors or logo:
+
+1. Confirm your workspace slug is set on the script tag or widget element:
+   ```html
+   data-tallysight-defaults-widget-config-workspace="your-workspace-slug"
+   ```
+2. Check that the slug matches exactly what appears in your Tallysight workspace URL — slugs are case-sensitive and hyphenated.
+3. If branding was recently updated in the dashboard, allow a few minutes for the change to propagate.
+
+## Widgets load on direct visit but not in an SPA
+
+If your site is a single-page application (React, Vue, Angular) and widgets don't load after client-side navigation, enable auto-detection:
+
+```html
+<script
+  data-tallysight-observer="true"
+  type="module"
+  src="https://storage.googleapis.com/tallysight-widgets/dist/tallysight.min.js"
+></script>
+```
+
+Or call `Tallysight.scan()` after your router renders new content.
+
+## Bet builder not appearing
+
+The bet builder widget is opt-in and is not enabled by default. Make sure the script attribute is set:
+
+```html
+<script
+  data-tallysight-bet-builder-enabled="true"
+  type="module"
+  src="https://storage.googleapis.com/tallysight-widgets/dist/tallysight.min.js"
+></script>
+```
+
+Or enable it at runtime:
+
+```javascript
+Tallysight.enableBetBuilder()
+```
+
+## Still having issues?
+
+Contact the Tallysight support team at **support@tallysight.com** with:
+- The URL of the page where the issue occurs
+- Your workspace slug
+- Any error messages from the browser console

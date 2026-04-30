@@ -1,0 +1,107 @@
+---
+title: "Tallysight widget types: an overview of all embeds"
+description: "Tallysight widgets are standalone JS bundles embedded via HTML attributes, covering odds comparison, betslip feeds, inline odds, promos, and bet building."
+---
+
+Tallysight widgets are self-contained JavaScript bundles served from a CDN. You add a single SDK script tag to your page and then place HTML elements with `data-tallysight-widget-type` attributes wherever you want a widget to appear. The SDK detects those elements, loads the right bundle, and renders the widget — all without touching your page's existing styles.
+
+## How widgets work
+
+### 1. Load the SDK
+
+Add the SDK script tag once, anywhere in your HTML document:
+
+```html
+<script
+  src="https://storage.googleapis.com/tallysight-widgets/dist/tallysight.min.js"
+  type="module"
+></script>
+```
+
+### 2. Place a widget element
+
+Add an HTML element with the widget type and ID attributes where you want the widget to render:
+
+```html
+<div
+  data-tallysight-widget-type="tile"
+  data-tallysight-widget-id="67ffcc2afd37cf9e44b636ed"
+  data-tallysight-widget-config-workspace="the-athletic"
+></div>
+```
+
+The SDK automatically detects elements with `data-tallysight-widget-type` when the DOM loads and renders the matching widget bundle into each one.
+
+## Available widgets
+
+| Widget name | Type attribute value | Best for |
+|-------------|---------------------|----------|
+| Tile | `tile` | Live odds comparison for a single game or market |
+| Feed | `feed` | Scrollable betslip feed for a sport or network |
+| Betslip | `betslip` | Single betslip display |
+| Odds Text | `odds-text` | Inline odds inside article body text |
+| Promo Tiles | `promo-tiles` | Sportsbook promotional offers |
+| Bet Builder | `bet-builder` | Interactive parlay and pick builder |
+
+## Two embed formats
+
+### Web component (HTML)
+
+The standard embed uses HTML data attributes on a `<span>` or `<div>`:
+
+```html
+<script
+  src="https://storage.googleapis.com/tallysight-widgets/dist/tallysight.min.js"
+  type="module"
+></script>
+<span
+  data-tallysight-widget-type="tile"
+  data-tallysight-widget-id="67ffcc2afd37cf9e44b636ed"
+  data-tallysight-widget-config-workspace="the-athletic"
+  data-tallysight-widget-config-odds-by="best-odds"
+  data-tallysight-widget-config-format="american"
+></span>
+```
+
+### WordPress shortcode
+
+For WordPress sites, use the equivalent shortcode format:
+
+```
+[tallysight-widget type="tile" id="67ffcc2afd37cf9e44b636ed" config-workspace="the-athletic" config-odds-by="best-odds"]
+```
+
+## Shadow DOM isolation
+
+Every Tallysight widget renders inside a [Shadow DOM](https://developer.mozilla.org/en-US/docs/Web/API/Web_components/Using_shadow_DOM). This means:
+
+- Your page's CSS rules do not bleed into the widget
+- The widget's internal styles do not affect your page
+- Workspace branding colors are applied as CSS variables scoped entirely within the shadow root
+
+You get a consistent widget appearance regardless of the CSS framework or stylesheet conventions your site uses.
+
+## Data flow
+
+When a widget initializes, it follows this sequence:
+
+1. The SDK reads the `data-tallysight-widget-id` and config attributes from the element
+2. The widget bundle fetches its configuration from the Tallysight API, passing the widget ID and any config params (such as `workspace`, `format`, and `odds-by`)
+3. The API returns pre-formatted data — including workspace branding, odds, and pick data
+4. The widget applies the workspace's color palette via CSS variables and renders the interface inside the Shadow DOM
+
+Because the widget fetches its own data independently, you do not need a server-side integration. Dropping the embed snippet into your HTML is all that is required.
+
+## Lazy loading
+
+By default, each widget bundle loads when the SDK initializes. You can defer loading until a widget approaches the viewport by enabling lazy loading:
+
+```html
+<script
+  src="https://storage.googleapis.com/tallysight-widgets/dist/tallysight.min.js"
+  data-tallysight-widget-loading="lazy"
+  type="module"
+></script>
+```
+
+You can also override this per widget using `data-tallysight-widget-loading="eager"` or `data-tallysight-widget-loading="lazy"` on the individual element.

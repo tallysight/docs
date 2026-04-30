@@ -1,0 +1,56 @@
+---
+title: "Workspaces: how Tallysight organizes branding and data"
+description: "Workspaces are the primary organizational unit on Tallysight, grouping analysts, widget configs, branding, and sportsbook affiliate settings."
+---
+
+A **workspace** is the organizational container for everything on Tallysight. It groups your analysts, widget configurations, branding settings, and sportsbook affiliate relationships into a single unit that every embedded widget references.
+
+<Note>
+"Workspace", "org", "organization", and "network" all refer to the same concept. You may encounter any of these terms in legacy embed code or support documentation — they are interchangeable.
+</Note>
+
+## What a workspace contains
+
+| Component | Description |
+|-----------|-------------|
+| Analysts / users | The platform users who create picks and betslips under this workspace |
+| Widget configurations | Default settings applied to widgets embedded for this workspace |
+| Branding | Custom colors (light and dark variants) and logos shown inside every embedded widget |
+| Sportsbook affiliate settings | The affiliate links and sportsbook restrictions applied to odds displayed in widgets |
+
+## Workspace examples
+
+Two representative workspaces on Tallysight are **The Athletic** and **Sports Interaction**. Each has its own analyst roster, brand palette, and sportsbook affiliate setup that flows through to every widget they embed.
+
+## The `workspace` config parameter
+
+Every Tallysight widget accepts a `workspace` parameter that tells the widget which workspace's data, branding, and affiliate settings to load. You pass this as a `data-tallysight-widget-config-workspace` attribute on the embed element:
+
+```html
+<span
+  data-tallysight-widget-type="tile"
+  data-tallysight-widget-id="67ffcc2afd37cf9e44b636ed"
+  data-tallysight-widget-config-workspace="the-athletic"
+></span>
+```
+
+The value is the workspace **slug** — a URL-safe identifier assigned when the workspace is created (e.g., `the-athletic`, `sports-interaction`).
+
+## How workspace branding works
+
+Each workspace can define a custom color palette for both light and dark modes. The branding model covers 12 color properties per theme:
+
+- **Border colors** — accent, primary, secondary, tertiary
+- **Background colors** — accent, primary, secondary, tertiary
+- **Text colors** — accent, primary, secondary, tertiary
+
+When you embed a widget with a `workspace` parameter, the widget fetches the workspace's branding from the Tallysight API and applies it via CSS variables. Your page's stylesheet does not interfere because widgets render inside a Shadow DOM — see [Shadow DOM isolation](/concepts/widgets-overview#shadow-dom-isolation) for details.
+
+## Workspace scope vs. platform scope
+
+Some widgets let you choose between two content scopes:
+
+- **Workspace scope** (`communityScope="workspace"`) — shows picks and betslips from analysts in your workspace only. This is the default.
+- **Platform scope** (`communityScope="platform"`) — shows picks and betslips from all analysts across all of Tallysight.
+
+You set this on the Feed widget using the `data-tallysight-widget-config-community-scope` attribute.

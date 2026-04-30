@@ -1,0 +1,57 @@
+---
+title: "Theme Tallysight widgets with colors and dark mode"
+description: "Control widget appearance with light and dark modes and a CSS variable system that applies your workspace branding automatically to every embed."
+---
+
+Tallysight widgets support light and dark modes, and apply workspace branding automatically through a CSS variable system. You control appearance through your workspace settings and optional per-widget configuration — no manual style overrides needed.
+
+## Light and dark mode
+
+Widgets default to light mode. The active theme for a widget is set through your workspace branding settings in the Tallysight dashboard. When you configure a dark-mode palette for your workspace, widgets embedded with that workspace slug will render in dark mode automatically.
+
+## CSS variable system
+
+Widget colors are resolved through a three-tier fallback chain. When a widget renders, it looks up each color in priority order and uses the first value it finds:
+
+| Priority | Source | When used |
+|----------|--------|-----------|
+| 1 | Per-widget config overrides (`--custom-*`) | Explicit overrides set on an individual widget embed |
+| 2 | Workspace branding (`--background-*`, `--text-*`, `--border-*`) | Colors fetched from your workspace settings in the Tallysight API |
+| 3 | Design system defaults | Built-in fallback values when no workspace branding is set |
+
+This means your workspace branding takes effect across all widgets automatically, and you can still override individual widgets when you need a one-off exception.
+
+## Color properties
+
+Each workspace can customize 12 color properties, and each property has a separate value for light and dark mode — 24 values in total.
+
+**Border colors**
+
+| Property | Purpose |
+|----------|---------|
+| `borderAccent` | Highlighted borders |
+| `borderPrimary` | Default borders |
+| `borderSecondary` | Subtle borders |
+| `borderTertiary` | Faintest borders |
+
+**Background colors**
+
+| Property | Purpose |
+|----------|---------|
+| `backgroundAccent` | Highlighted backgrounds |
+| `backgroundPrimary` | Main widget background |
+| `backgroundSecondary` | Card backgrounds |
+| `backgroundTertiary` | Nested container backgrounds |
+
+**Text colors**
+
+| Property | Purpose |
+|----------|---------|
+| `textAccent` | Highlighted text — links and emphasis |
+| `textPrimary` | Main body text |
+| `textSecondary` | Muted and secondary text |
+| `textTertiary` | Placeholder and disabled text |
+
+<Note>
+Theming is applied at the workspace level. All widgets that reference the same workspace slug share branding automatically — you set your colors once, and every widget picks them up without any additional configuration.
+</Note>

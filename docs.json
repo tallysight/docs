@@ -1,0 +1,74 @@
+{
+  "$schema": "https://mintlify.com/docs.json",
+  "name": "Tallysight",
+  "theme": "luma",
+  "colors": {
+    "primary": "#008aff",
+    "light": "#e6f3ff",
+    "dark": "#005cbf"
+  },
+  "navbar": {
+    "primary": {
+      "type": "github",
+      "href": "https://github.com/tallysight/tallysight"
+    }
+  },
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Documentation",
+        "groups": [
+          {
+            "group": "Get Started",
+            "pages": ["introduction", "quickstart"]
+          },
+          {
+            "group": "Core Concepts",
+            "pages": [
+              "concepts/picks-and-betslips",
+              "concepts/workspaces",
+              "concepts/widgets-overview"
+            ]
+          },
+          {
+            "group": "Embedding Widgets",
+            "pages": [
+              "widgets/installation",
+              "widgets/tile",
+              "widgets/feed",
+              "widgets/betslip",
+              "widgets/odds-text",
+              "widgets/promo-tiles",
+              "widgets/bet-builder"
+            ]
+          },
+          {
+            "group": "SDK Reference",
+            "pages": [
+              "sdk/api-reference",
+              "sdk/configuration",
+              "sdk/lazy-loading",
+              "sdk/auto-detection"
+            ]
+          },
+          {
+            "group": "Customization",
+            "pages": [
+              "customization/theming",
+              "customization/workspace-branding",
+              "customization/self-hosting"
+            ]
+          },
+          {
+            "group": "Help",
+            "pages": ["troubleshooting", "faq"]
+          },
+          {
+            "group": "Changelog",
+            "pages": ["changelog/overview"]
+          }
+        ]
+      }
+    ]
+  }
+}

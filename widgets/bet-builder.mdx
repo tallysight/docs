@@ -1,0 +1,80 @@
+---
+title: "Bet Builder widget: let visitors build custom parlays"
+description: "Let visitors build and manage custom parlays by clicking odds cells on Tile widgets — enabled with a single attribute on the SDK script tag."
+---
+
+The Bet Builder widget lets visitors on your site interactively create and manage custom parlay bets by clicking odds cells on Tile widgets. When the bet builder is active, each clickable cell in a Tile widget becomes a bet selection. Selections accumulate in a floating slip that the visitor can review, adjust, and take to a sportsbook. Bet state persists in `localStorage` across page navigations within your site.
+
+## Enabling via script attribute
+
+The simplest way to enable the bet builder is to add `data-tallysight-bet-builder-enabled="true"` to the SDK script tag:
+
+```html
+<script
+  data-tallysight-defaults-widget-config-workspace="your-workspace"
+  data-tallysight-bet-builder-enabled="true"
+  type="module"
+  src="https://storage.googleapis.com/tallysight-widgets/dist/tallysight.min.js"
+></script>
+```
+
+When this attribute is present, the SDK automatically creates and appends the bet builder widget to the document body on page load.
+
+## Enabling via JavaScript API
+
+You can also enable and disable the bet builder at runtime using the `Tallysight` JavaScript API. This is useful for toggling the feature based on user preferences or page context:
+
+```javascript
+// Enable the bet builder at runtime
+Tallysight.enableBetBuilder()
+
+// Disable the bet builder at runtime
+Tallysight.disableBetBuilder()
+```
+
+`enableBetBuilder()` returns a Promise that resolves to `true` on success or `false` if the bet builder could not be initialized. `disableBetBuilder()` returns `true` on success.
+
+You can also pass the configuration when initializing the SDK programmatically:
+
+```javascript
+Tallysight.configure({
+  betBuilder: { enabled: true },
+})
+```
+
+## How it works
+
+When the bet builder is enabled:
+
+1. The SDK automatically creates a widget element with `data-tallysight-widget-type="bet-builder"` and appends it to `<body>`.
+2. Odds cells in Tile widgets on the page become interactive — clicking a cell adds or removes it from the current parlay.
+3. The floating bet slip displays selected picks, combined odds, and a link to place the parlay at a sportsbook.
+4. Bet state is stored in `localStorage` so it survives page navigation within your site.
+
+## Complete embed example
+
+```html
+<script
+  data-tallysight-defaults-widget-config-workspace="your-workspace"
+  data-tallysight-bet-builder-enabled="true"
+  type="module"
+  src="https://storage.googleapis.com/tallysight-widgets/dist/tallysight.min.js"
+></script>
+
+<!-- Tile widgets on the page become interactive when the bet builder is enabled -->
+<span
+  data-tallysight-widget-type="tile"
+  data-tallysight-widget-id="67ffcc2afd37cf9e44b636ed"
+  data-tallysight-widget-config-odds-by="best-odds"
+></span>
+
+<span
+  data-tallysight-widget-type="tile"
+  data-tallysight-widget-id="67ffcc2afd37cf9e44b636ee"
+  data-tallysight-widget-config-odds-by="best-odds"
+></span>
+```
+
+<Note>
+The bet builder widget element is created and inserted into the DOM automatically when the SDK initializes with `data-tallysight-bet-builder-enabled="true"` or when you call `Tallysight.enableBetBuilder()`. When you call `Tallysight.disableBetBuilder()`, the widget element is removed from the DOM and the bet store state is cleaned up. You do not need to add a `data-tallysight-widget-type="bet-builder"` element manually.
+</Note>

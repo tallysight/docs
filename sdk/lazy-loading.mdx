@@ -1,0 +1,116 @@
+---
+title: "Lazy load Tallysight widgets to speed up your page"
+description: "Use IntersectionObserver lazy loading to defer widget bundle fetching until a widget is near the viewport, reducing initial page load time."
+---
+
+Lazy loading uses the browser's IntersectionObserver API to defer loading widget bundles until a widget is about to enter the viewport — reducing initial page load time. Instead of fetching every bundle when the page first loads, the SDK waits until each widget is within range of the screen before fetching its bundle.
+
+This is especially useful for pages with several widgets placed below the fold, where many bundles would otherwise be downloaded before the visitor ever scrolls to them.
+
+---
+
+## Enable lazy loading globally
+
+You can enable lazy loading for all widgets in three ways. Choose the method that fits your setup.
+
+### Method 1: Script tag attribute
+
+Add `data-tallysight-widget-loading="lazy"` to the SDK `<script>` tag. This is applied before the SDK initializes and requires no JavaScript.
+
+```html
+<script
+  data-tallysight-defaults-widget-config-workspace="your-workspace"
+  data-tallysight-widget-loading="lazy"
+  type="module"
+  src="https://storage.googleapis.com/tallysight-widgets/dist/tallysight.min.js"
+></script>
+```
+
+### Method 2: `enableLazyLoading()`
+
+Call `Tallysight.enableLazyLoading()` after the SDK is ready. This is convenient when you want to conditionally enable lazy loading based on page context or user preferences.
+
+```javascript
+await Tallysight.whenReady()
+Tallysight.enableLazyLoading()
+```
+
+### Method 3: `Tallysight.configure()`
+
+Pass `lazyLoad` options through `configure()`. You can chain this with other configuration calls.
+
+```javascript
+Tallysight
+  .configure({ autoDetect: true })
+  .enableLazyLoading()
+```
+
+To disable lazy loading at runtime — which causes any pending lazy-queued widgets to load immediately — call `disableLazyLoading()`:
+
+```javascript
+Tallysight.disableLazyLoading()
+```
+
+---
+
+## Per-widget loading strategy
+
+Individual widget elements can override the global lazy loading setting using the `data-tallysight-widget-loading` attribute. This lets you mix strategies on the same page — for example, loading a hero widget eagerly while deferring widgets further down the page.
+
+| Value | Behavior |
+|---|---|
+| `eager` | Always loads immediately, ignoring the global lazy loading setting |
+| `lazy` | Always uses lazy loading, ignoring the global setting |
+| `auto` | Follows the global lazy loading configuration (default) |
+
+```html
+<!-- Always load immediately, regardless of global setting -->
+<span
+  data-tallysight-widget-type="tile"
+  data-tallysight-widget-id="67ffcc2afd37cf9e44b636ed"
+  data-tallysight-widget-loading="eager"
+></span>
+
+<!-- Always lazy load, regardless of global setting -->
+<span
+  data-tallysight-widget-type="feed"
+  data-tallysight-widget-id="67ffcc2afd37cf9e44b636ee"
+  data-tallysight-widget-loading="lazy"
+></span>
+
+<!-- Follow global setting (this is the default) -->
+<span
+  data-tallysight-widget-type="odds-text"
+  data-tallysight-widget-id="67ffcc2afd37cf9e44b636ef"
+  data-tallysight-widget-loading="auto"
+></span>
+```
+
+<Tip>
+Use `eager` on widgets that appear above the fold — those the visitor sees immediately on page load — so they render without any delay. Reserve `lazy` for widgets that sit below the fold.
+</Tip>
+
+---
+
+## Preloading a bundle
+
+`Tallysight.preloadWidget(type)` fetches and caches a widget bundle without rendering anything. Use it when you want to warm up a bundle in the background so the widget is ready to display instantly when needed.
+
+```javascript
+// Preload the odds-text bundle while the user is reading above-the-fold content
+Tallysight.preloadWidget("odds-text")
+  .then(() => console.log("Bundle ready"))
+  .catch((err) => console.error("Preload failed", err))
+```
+
+---
+
+## How the IntersectionObserver works
+
+The SDK calculates a `rootMargin` based on the widget element's actual height — or defaults to 200 px when the element has no rendered height yet. This means the bundle starts loading before the widget fully enters the viewport, so it appears to load instantly as the user scrolls.
+
+The SDK also cleans up observers for elements that are removed from the DOM, preventing memory leaks on pages that add and remove widgets dynamically.
+
+<Note>
+IntersectionObserver is supported in all modern browsers. The SDK does not include a polyfill. If you need to support older environments, either avoid lazy loading or supply your own IntersectionObserver polyfill.
+</Note>

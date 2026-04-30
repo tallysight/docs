@@ -1,0 +1,51 @@
+---
+title: "Picks and betslips: the Tallysight analytics model"
+description: "A pick is a single betting prediction; a betslip groups one or more picks into a shareable card that followers and publishers can discover."
+---
+
+On Tallysight, analysts express their betting opinions as **picks**, and they package those picks into **betslips** for sharing. Understanding these two concepts is the foundation for working with any Tallysight widget or feed.
+
+## What is a pick?
+
+A pick is a single betting prediction tied to a specific outcome. Each pick contains the following data:
+
+- **Outcome and market** — the team, player, or result the analyst is backing (e.g., Lakers -3.5, Over 224.5)
+- **Odds** — the price at the time the pick was submitted, expressed in American, decimal, or fractional format
+- **Sportsbook source** — the book where the odds originated
+- **Status** — whether the pick is `pending`, `won`, `lost`, or `push`
+
+## What is a betslip?
+
+A betslip is a named group of one or more picks submitted by an analyst at a point in time—similar to a parlay card. Analysts give their betslip a title, attach their picks, and publish it to their profile. Followers see betslips in their feed and can track how an analyst's predictions perform over time.
+
+Publishers embed betslip feeds and individual betslip tiles on their own sites to surface analyst picks as live odds comparison widgets. See [Feed widget](/widgets/feed) and [Betslip widget](/widgets/betslip) for embed details.
+
+## Pick lifecycle
+
+Picks start as **pending** once an analyst submits them. When the associated game or event concludes, Tallysight resolves each pick to one of the following terminal statuses:
+
+| Status | Meaning |
+|--------|---------|
+| `won` | The predicted outcome occurred |
+| `lost` | The predicted outcome did not occur |
+| `push` | The result was a tie against the line (stake returned) |
+
+Resolved picks roll up into the analyst's overall record, which appears in feed cards and on analyst profiles.
+
+## How analysts use picks
+
+Analysts create picks and betslips directly inside the Tallysight platform. After publishing a betslip, it becomes visible in network feeds and appears in search. Each betslip contributes to an analyst's tracked record, which helps followers evaluate accuracy over time.
+
+## How publishers use picks
+
+As a publisher, you embed analyst picks on your site using the [Feed widget](/concepts/widgets-overview) and the [Betslip widget](/concepts/widgets-overview). These widgets pull live pick data from the Tallysight API and render it as an odds comparison interface — complete with sportsbook logos, affiliate links, and live status badges.
+
+## Verified vs. community picks
+
+The Feed widget supports three content scopes selectable via tabs:
+
+- **Verified** — picks from analysts who have been reviewed and approved by Tallysight
+- **Community** — picks from all other registered analysts
+- **All** — both verified and community picks combined
+
+You control which tabs appear in your embed using the `data-tallysight-widget-config-tabs` attribute. See the [Feed widget configuration](/widgets/feed) for details.
