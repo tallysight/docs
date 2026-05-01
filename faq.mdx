@@ -40,7 +40,7 @@ You still need to include the SDK script tag — add it to your theme's `header.
 </Accordion>
 
 <Accordion title="Will widgets slow down my page?">
-Tallysight widgets are designed for performance. The SDK (`tallysight.min.js`) is small and loads asynchronously. Individual widget bundles are loaded on demand — only the widget types you actually use are downloaded. You can further improve performance by enabling lazy loading, which defers bundle loading until a widget is near the viewport:
+Tallysight widgets are designed for performance. The SDK (`tallysight.min.js`) is small and loads asynchronously. The SDK loads individual widget bundles on demand — it only downloads the widget types you actually use. You can further improve performance by enabling lazy loading, which defers bundle loading until a widget is near the viewport:
 
 ```html
 <script

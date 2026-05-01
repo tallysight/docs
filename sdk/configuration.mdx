@@ -3,7 +3,7 @@ title: "Configure the Tallysight SDK: attributes and options"
 description: "Set data- attributes on the SDK script tag or call Tallysight.configure() to control lazy loading, auto-detection, bet builder, and widget defaults."
 ---
 
-The SDK reads configuration from `data-` attributes on the `<script>` tag at load time and can also be updated at runtime using `Tallysight.configure()`. Script tag attributes are applied first; programmatic calls override them at any point after the SDK initializes.
+The SDK reads configuration from `data-` attributes on the `<script>` tag at load time, and you can also update it at runtime using `Tallysight.configure()`. The SDK applies script tag attributes first; programmatic calls override them at any point after the SDK initializes.
 
 ## Script tag attributes
 
@@ -63,7 +63,7 @@ Tallysight
 
 ## Default and override widget config propagation
 
-The `data-tallysight-defaults-widget-config-*` and `data-tallysight-overrides-widget-config-*` attributes let you apply configuration to every widget on the page from a single place on the script tag, rather than repeating the same attribute on each widget element.
+The `data-tallysight-defaults-widget-config-*` and `data-tallysight-overrides-widget-config-*` attributes let you apply configuration to every widget on the page from a single place on the script tag. This avoids repeating the same attribute on each widget element.
 
 ### Defaults
 
