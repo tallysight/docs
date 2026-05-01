@@ -107,7 +107,7 @@ Tallysight.preloadWidget("odds-text")
 
 ## How the IntersectionObserver works
 
-The SDK calculates a `rootMargin` based on the widget element's actual height — or defaults to 200 px when the element has no rendered height yet. This means the bundle starts loading before the widget fully enters the viewport, so it appears to load instantly as the user scrolls.
+The SDK calculates a `rootMargin` based on the widget element's actual height — or defaults to 200 px when the element has no rendered height yet. This means the bundle starts loading before the widget fully enters the viewport, so it appears to load instantly as the visitor scrolls.
 
 The SDK also cleans up observers for elements that are removed from the DOM, preventing memory leaks on pages that add and remove widgets dynamically.
 
