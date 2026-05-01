@@ -13,6 +13,11 @@
       "href": "https://github.com/tallysight/tallysight"
     }
   },
+  "logo": {
+    "light": "/logo/ts-logo.svg",
+    "dark": "/logo/ts-logo-w.svg",
+    "href": "https://tally.site"
+  },
   "navigation": {
     "tabs": [
       {
