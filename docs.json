@@ -1,7 +1,7 @@
 {
   "$schema": "https://mintlify.com/docs.json",
   "name": "Tallysight",
-  "theme": "linden",
+  "theme": "maple",
   "colors": {
     "primary": "#008aff",
     "light": "#e6f3ff",
