@@ -3,7 +3,7 @@ title: "Auto-detect Tallysight widgets injected into the DOM"
 description: "Use MutationObserver auto-detection to automatically load widgets added to the DOM after page load — ideal for SPAs and AJAX-driven content."
 ---
 
-Auto-detection uses a MutationObserver to watch the DOM for newly added widget elements. When a widget element is added dynamically — for example, by a SPA router, a content management system rendering blocks on the fly, or an AJAX request — the SDK automatically detects it and loads the corresponding widget bundle without any extra code on your part.
+Auto-detection uses a MutationObserver to watch the DOM for newly added widget elements. When a widget element is added dynamically, the SDK automatically detects it and loads the corresponding widget bundle without any extra code on your part. This covers cases like a SPA router mounting new routes, a content management system rendering blocks on the fly, or an AJAX request injecting markup.
 
 ---
 

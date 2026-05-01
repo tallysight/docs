@@ -22,7 +22,7 @@ When this attribute is present, the SDK automatically creates and appends the be
 
 ## Enabling via JavaScript API
 
-You can also enable and disable the bet builder at runtime using the `Tallysight` JavaScript API. This is useful for toggling the feature based on user preferences or page context:
+You can also enable and disable the bet builder at runtime using the `Tallysight` JavaScript API. This is useful for toggling the feature based on visitor preferences or page context:
 
 ```javascript
 // Enable the bet builder at runtime
@@ -76,5 +76,5 @@ When the bet builder is enabled:
 ```
 
 <Note>
-The bet builder widget element is created and inserted into the DOM automatically when the SDK initializes with `data-tallysight-bet-builder-enabled="true"` or when you call `Tallysight.enableBetBuilder()`. When you call `Tallysight.disableBetBuilder()`, the widget element is removed from the DOM and the bet store state is cleaned up. You do not need to add a `data-tallysight-widget-type="bet-builder"` element manually.
+The SDK automatically creates the bet builder widget element and inserts it into the DOM when it initializes with `data-tallysight-bet-builder-enabled="true"`, or when you call `Tallysight.enableBetBuilder()`. When you call `Tallysight.disableBetBuilder()`, the SDK removes the widget element from the DOM and cleans up the bet store state. You do not need to add a `data-tallysight-widget-type="bet-builder"` element manually.
 </Note>

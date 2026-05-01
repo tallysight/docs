@@ -39,7 +39,7 @@ Add the SDK script tag and a `<span>` element with `data-tallysight-widget-type=
 | `config-format` | `american`, `decimal`, `fractional` | Odds display format. If omitted, the widget auto-detects the correct format based on the visitor's geolocation |
 | `config-type` | `games`, `futures` | Tile type. If omitted, the widget detects the correct type from its configuration in the Tallysight dashboard |
 | `config-hide-brand-logo` | `true`, `false` | Whether to hide the Tallysight branding in the widget footer |
-| `config-multiple` | `true`, `false` | Whether the tile represents a group of related markets. Set automatically by the Tallysight embed dialog |
+| `config-multiple` | `true`, `false` | Whether the tile represents a group of related markets. The Tallysight embed dialog sets this automatically |
 
 ## Tile types
 
@@ -56,7 +56,7 @@ A futures tile (`type: "future"`) shows a list of teams or players with their od
 A props tile (`type: "props"`) shows player or team prop markets for a specific game — for example, passing yards or total rebounds. Props tiles are associated with a parent game and a specific market.
 
 <Tip>
-The Tile widget uses CSS container queries, not viewport media queries, so it adapts to any column width. You can safely embed a tile in a right rail (350 px), a sidebar (300 px), or a full-width article — it adjusts its layout, title length, and cell sizes automatically.
+The Tile widget uses CSS container queries, not viewport media queries, so it adapts to any column width. You can safely embed a tile in a right rail (350 px), a sidebar (300 px), or a full-width article. The widget adjusts its layout, title length, and cell sizes automatically.
 </Tip>
 
 ## Getting widget IDs

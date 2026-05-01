@@ -3,7 +3,7 @@ title: "Lazy load Tallysight widgets to speed up your page"
 description: "Use IntersectionObserver lazy loading to defer widget bundle fetching until a widget is near the viewport, reducing initial page load time."
 ---
 
-Lazy loading uses the browser's IntersectionObserver API to defer loading widget bundles until a widget is about to enter the viewport — reducing initial page load time. Instead of fetching every bundle when the page first loads, the SDK waits until each widget is within range of the screen before fetching its bundle.
+Lazy loading uses the browser's IntersectionObserver API to defer loading widget bundles until a widget is about to enter the viewport. This reduces initial page load time. Instead of fetching every bundle when the page first loads, the SDK waits until each widget is within range of the screen.
 
 This is especially useful for pages with several widgets placed below the fold, where many bundles would otherwise be downloaded before the visitor ever scrolls to them.
 
@@ -97,7 +97,7 @@ Use `eager` on widgets that appear above the fold — those the visitor sees imm
 `Tallysight.preloadWidget(type)` fetches and caches a widget bundle without rendering anything. Use it when you want to warm up a bundle in the background so the widget is ready to display instantly when needed.
 
 ```javascript
-// Preload the odds-text bundle while the user is reading above-the-fold content
+// Preload the odds-text bundle while the visitor is reading above-the-fold content
 Tallysight.preloadWidget("odds-text")
   .then(() => console.log("Bundle ready"))
   .catch((err) => console.error("Preload failed", err))
@@ -107,7 +107,7 @@ Tallysight.preloadWidget("odds-text")
 
 ## How the IntersectionObserver works
 
-The SDK calculates a `rootMargin` based on the widget element's actual height — or defaults to 200 px when the element has no rendered height yet. This means the bundle starts loading before the widget fully enters the viewport, so it appears to load instantly as the user scrolls.
+The SDK calculates a `rootMargin` based on the widget element's actual height — or defaults to 200 px when the element has no rendered height yet. This means the bundle starts loading before the widget fully enters the viewport, so it appears to load instantly as the visitor scrolls.
 
 The SDK also cleans up observers for elements that are removed from the DOM, preventing memory leaks on pages that add and remove widgets dynamically.
 

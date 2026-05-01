@@ -3,13 +3,13 @@ title: "Apply your workspace brand colors to Tallysight widgets"
 description: "Set custom colors for light and dark mode once in the Tallysight dashboard, and every widget embedded with your workspace slug picks them up automatically."
 ---
 
-Workspace branding lets you apply your organization's colors to every widget embedded on your site. You set branding once in the Tallysight dashboard and it propagates automatically to all widgets that reference your workspace slug — no per-widget style configuration required.
+Workspace branding lets you apply your organization's colors to every widget embedded on your site. You set branding once in the Tallysight dashboard, and it propagates automatically to all widgets that reference your workspace slug. No per-widget style configuration required.
 
 ## How branding is applied
 
 When a widget loads, it reads the `workspace` config value and fetches your workspace's branding from the Tallysight API. The API response contains your light and dark color palettes, which the widget applies via CSS variables inside its Shadow DOM.
 
-You pass your workspace slug to widgets using the `data-tallysight-widget-config-workspace` attribute on the widget element, or use `data-tallysight-defaults-widget-config-workspace` on the script tag to set it for every widget on the page at once.
+You pass your workspace slug to widgets using the `data-tallysight-widget-config-workspace` attribute on the widget element. To set it for every widget on the page at once, use `data-tallysight-defaults-widget-config-workspace` on the script tag instead.
 
 ## Branding properties
 
