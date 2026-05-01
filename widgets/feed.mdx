@@ -44,7 +44,7 @@ When you set `config-tabs`, the widget renders a tab bar above the feed. Clickin
 | `verified` | Betslips from analysts with verified status |
 | `community` | Betslips from community members |
 
-If you only supply a single tab value, the widget does not show a tab bar — it simply requests that feed type from the API. If you omit `config-tabs` entirely, the widget falls back to the default behavior with no tab parameter sent to the API, which is backward compatible with older embeds.
+If you only supply a single tab value, the widget does not show a tab bar — it simply requests that feed type from the API. If you omit `config-tabs` entirely, the widget falls back to the default behavior and sends no tab parameter to the API. This is backward compatible with older embeds.
 
 ## Configuration options
 
@@ -56,7 +56,7 @@ If you only supply a single tab value, the widget does not show a tab bar — it
 | `config-sportsbook` | (none) | Filter the feed to picks associated with a specific sportsbook. Contact your Tallysight account manager for the sportsbook identifier |
 | `config-hide-creators` | (none) | Comma-separated list of creator `_id` values or usernames to exclude from the feed |
 | `config-show-filters` | `true` | Show or hide the sport pill and event dropdown filter UI |
-| `config-community-scope` | `workspace` | `workspace` limits community picks to your embed organization; `platform` shows community picks from all of Tallysight |
+| `config-community-scope` | `workspace` | `workspace` limits community picks to your workspace; `platform` shows community picks from all of Tallysight |
 
 ## Embed examples
 
