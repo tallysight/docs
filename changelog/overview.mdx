@@ -5,6 +5,21 @@ description: "Latest updates and improvements to the Tallysight platform, widget
 
 Stay up to date with the latest changes to Tallysight. This page lists product updates, new features, and bug fixes shipped each week.
 
+<Update label="Week of May 1, 2026" description="Faster visitor geolocation via edge headers">
+
+## Updates
+
+**Faster visitor geolocation**
+
+Tallysight now resolves visitor location from Cloudflare and Vercel edge headers before falling back to third-party IP lookup providers. Pages that rely on geolocation — including geolocated [Promo Tiles](/widgets/promo-tiles) offers and the automatic odds format detection used by the [Tile](/widgets/tile) and [Odds Text](/widgets/odds-text) widgets — now respond faster and depend less on external API availability. No configuration changes are required.
+
+## Bug fixes
+
+- **Geolocation state lookup**: Visitors served through Vercel were occasionally not matched to the correct US state because the parser stored the region code instead of the full state name. State enrichment now resolves correctly, so state-gated offers and content show up reliably.
+- **Geolocation resilience**: A malformed city header from upstream no longer throws an error when decoding visitor location. The geolocation lookup gracefully falls back instead of failing the request.
+
+</Update>
+
 <Update label="Week of April 30, 2026" description="Geolocated community offers and per-sport live-odds buffer tuning">
 
 ## Updates
