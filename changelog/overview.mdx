@@ -5,6 +5,32 @@ description: "Weekly release notes for the Tallysight platform, widgets, and SDK
 
 Stay up to date with the latest changes to Tallysight. This page lists product updates, new features, and bug fixes shipped each week.
 
+<Update label="Week of May 4, 2026" description="In-platform settings and help menu, faster widget loads, and reliability fixes">
+
+## New features
+
+**Settings and help menu in the platform**
+
+Account and workspace settings now have dedicated pages inside the app. You can edit your profile, email, socials, and password from **Settings**, and workspace admins get a **Developer** section with a copy-paste embed script, the WordPress plugin download, embed examples, and links to docs. The user menu also includes a **Help** submenu with quick links to [documentation](/) and the [changelog](/changelog/overview).
+
+## Updates
+
+**Faster widget loads**
+
+Widget API responses are now cached, so embedded [Tile](/widgets/tile), [Odds Text](/widgets/odds-text), [Promo Tiles](/widgets/promo-tiles), and bet finder widgets render faster on repeat visits.
+
+**Original sportsbook on internal pages**
+
+Picks shown on Tallysight-hosted pages — including the home feed and betslip detail pages — now display the sportsbook the pick was actually placed on. Affiliate sportsbook swaps continue to apply to embedded widgets as before.
+
+## Bug fixes
+
+- **Widgets on third-party sites**: Widgets no longer fail to load on a small number of embedded sites where analytics initialization could throw. Analytics is now non-blocking, so widgets always render even if analytics can't start.
+- **Sports Interaction sportsbook**: Requests using the `sportsinteraction` slug are now accepted and resolve to the correct sportsbook, fixing missing odds and incorrect embed URLs.
+- **[Bet builder](/widgets/bet-builder) reliability**: Fixed a runtime error that could occur when a sportsbook timestamp arrived in an unexpected format.
+
+</Update>
+
 <Update label="Week of May 1, 2026" description="Faster visitor location detection">
 
 ## Updates
