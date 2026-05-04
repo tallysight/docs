@@ -5,13 +5,35 @@ description: "Weekly release notes for the Tallysight platform, widgets, and SDK
 
 Stay up to date with the latest changes to Tallysight. This page lists product updates, new features, and bug fixes shipped each week.
 
-<Update label="Week of May 1, 2026" description="Faster visitor location detection">
+<Update label="Week of May 4, 2026" description="Become a Creator nav button, in-app settings and developer install, faster widget loads">
+
+## New features
+
+**Become a Creator in the top nav**
+
+Fans can now apply to become a creator from any page. A **Become a Creator** button appears in the top bar on desktop and the mobile header, opening the application modal directly. The button hides automatically once an application is submitted.
+
+**In-app settings and Help menu**
+
+Account and workspace settings now have dedicated in-app pages, including profile, email, socials, and password. The user menu has a new **Help** submenu linking to [Documentation](/) and the [Changelog](/changelog/overview), so you can jump to product docs without leaving the app.
+
+**Developer install page**
+
+A new **Developer** section under workspace settings gives you a copy-to-clipboard SDK script tag, the WordPress plugin download, and embed examples for the Tile, Feed, and Standings widgets — everything you need to embed Tallysight on your site. See [widget installation](/widgets/installation) for the full reference.
 
 ## Updates
+
+**Faster widget loads**
+
+Widget API responses (Tile, Odds Tile, Bet Finder, and Odds Text) are now cached, so embedded widgets render faster on repeat views. Cache lifetime adapts to how confidently a team or player name was matched, so high-confidence pages stay snappier without serving stale results.
 
 **Faster visitor location detection**
 
 Visitor location now resolves faster on pages that depend on it, including geolocated [Promo Tiles](/widgets/promo-tiles) offers and the automatic odds format used by the [Tile](/widgets/tile) and [Odds Text](/widgets/odds-text) widgets. No configuration changes are required.
+
+## Bug fixes
+
+- **Sportsbook market coverage**: Added a FanDuel mapping for soccer second-half team total markets, so UEFA Europa League and other soccer second-half team totals now resolve to the correct game period and team.
 
 </Update>
 
