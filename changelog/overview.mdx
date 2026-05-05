@@ -5,6 +5,32 @@ description: "Weekly release notes for the Tallysight platform, widgets, and SDK
 
 Stay up to date with the latest changes to Tallysight. This page lists product updates, new features, and bug fixes shipped each week.
 
+<Update label="Week of May 4, 2026" description="In-platform settings, faster widget loads, and sportsbook display fixes">
+
+## New features
+
+**In-platform settings and Help menu**
+
+Account settings now have dedicated pages for **Profile**, **Email**, **Socials**, and **Password**, plus a **Workspace** section with a **Developer** page for embed-script and WordPress plugin install instructions. The user menu also includes a **Help** submenu with quick links to Documentation, the Changelog, and Install resources.
+
+## Updates
+
+**Faster widget loads on tiles, odds tile, bet finder, and odds text endpoints**
+
+Entity-name lookups for [Tile](/widgets/tile), [Odds Text](/widgets/odds-text), bet finder, and odds tile now resolve faster and more accurately. Exact name matches are preferred, and lookups are cached, so widgets render quicker and return more relevant entities.
+
+**Original sportsbook shown on internal betslip views**
+
+On internal pages (community feeds and the betslip detail page), each pick now shows the sportsbook it was actually placed on. Affiliate sportsbook swaps continue to apply on external [widget](/widgets/betslip) embeds, so creators still get attribution where they need it.
+
+## Bug fixes
+
+- **Sports Interaction in widget configs**: Widget requests using `sportsinteraction` in the `sportsbook`, `sportsbooks`, or `oddsby` parameters are now normalized to the canonical slug, fixing 403 errors and empty results on embeds that used the alternate spelling.
+- **Bet builder reliability**: Fixed a runtime error in the [bet builder](/widgets/bet-builder) when sportsbook timestamps were returned as strings, so requests no longer fail intermittently.
+- **Sportsbook market coverage**: Corrected entity matching for soccer team total markets on bet365, so per-team totals create separate markets at the same line instead of colliding onto another team's market.
+
+</Update>
+
 <Update label="Week of May 1, 2026" description="Faster visitor location detection">
 
 ## Updates
